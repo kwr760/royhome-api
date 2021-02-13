@@ -8,7 +8,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-data class Resume(
+class Resume(
         @Id
         @Type(type = "pg-uuid")
         @GeneratedValue(strategy = GenerationType.AUTO)
