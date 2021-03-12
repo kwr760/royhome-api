@@ -1,22 +1,20 @@
-package net.royhome.api.model
+package net.royhome.api.model.resume
 
 import org.hibernate.annotations.Type
 import java.util.*
 import javax.persistence.*
 
 @Entity
-class ResumeEducation(
+class Skill(
     @Id
     @Type(type = "pg-uuid")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "resume_education_id")
+    @Column(name = "skill_id")
     val id: UUID = UUID.randomUUID(),
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "resume_id")
-    val resume: Resume,
+    @JoinColumn(name = "group_id", insertable = false, updatable = false)
+    val skillGroup: SkillGroup,
 
-    val school: String = "",
-    val degree: String = "",
-    val graduation: String = "",
+    val name: String = "",
 )

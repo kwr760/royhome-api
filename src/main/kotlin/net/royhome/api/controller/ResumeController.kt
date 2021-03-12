@@ -1,6 +1,6 @@
 package net.royhome.api.controller
 
-import net.royhome.api.model.Resume
+import net.royhome.api.model.resume.Resume
 import net.royhome.api.model.api.Request
 import net.royhome.api.model.api.Response
 import net.royhome.api.model.api.Result

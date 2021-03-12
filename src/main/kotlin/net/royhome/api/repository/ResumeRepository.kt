@@ -1,6 +1,6 @@
 package net.royhome.api.repository
 
-import net.royhome.api.model.Resume
+import net.royhome.api.model.resume.Resume
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

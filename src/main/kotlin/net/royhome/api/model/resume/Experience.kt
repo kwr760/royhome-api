@@ -1,16 +1,15 @@
-package net.royhome.api.model
+package net.royhome.api.model.resume
 
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.Where
 import java.util.*
 import javax.persistence.*
 
 @Entity
-class ResumeExperience(
+class Experience(
     @Id
     @Type(type = "pg-uuid")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "resume_experience_id")
+    @Column(name = "experience_id")
     val id: UUID = UUID.randomUUID(),
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -22,12 +21,9 @@ class ResumeExperience(
     val startDate: String? = null,
     val endDate: String? = null,
     @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @Where(clause = "TYPE = 'DESCRIPTION'")
-    val description: Set<ResumeData>,
+    val description: Set<ExperienceDescription>,
     @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @Where(clause = "TYPE = 'BULLET'")
-    val bullets: Set<ResumeData>,
-    @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @Where(clause = "TYPE = 'TECH'")
-    val techs: Set<ResumeData>,
+    val bullets: Set<ExperienceBullet>,
+    @OneToOne(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    val skills: SkillGroup,
 )

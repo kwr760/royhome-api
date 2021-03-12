@@ -1,4 +1,4 @@
-package net.royhome.api.model
+package net.royhome.api.model.resume
 
 import org.hibernate.annotations.Type
 import java.util.*
@@ -19,9 +19,9 @@ class Resume(
         val email: String = "",
         val summary: String = "",
         @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-        val skillGroups: Set<ResumeSkills>,
+        val skillGroups: Set<SkillGroup>,
         @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-        val education: Set<ResumeEducation>,
+        val education: Set<Education>,
         @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-        val experience: Set<ResumeExperience>,
+        val experience: Set<Experience>,
 )
