@@ -1,5 +1,6 @@
 package net.royhome.api.model.resume
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.Type
 import java.util.*
 import javax.persistence.*
@@ -14,10 +15,11 @@ class SkillGroup(
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "resume_id", nullable = true)
+    @JsonBackReference
     val resume: Resume,
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "experience_id", nullable = true)
+    @JsonBackReference
     val experience: Experience,
 
     val name: String = "",
