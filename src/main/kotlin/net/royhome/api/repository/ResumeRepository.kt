@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ResumeRepository : JpaRepository<Resume, Long>
+interface ResumeRepository : JpaRepository<Resume, Long> {
+    fun findByEmail(email: String): Resume
+}

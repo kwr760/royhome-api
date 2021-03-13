@@ -1,5 +1,6 @@
 package net.royhome.api.model.resume
 
+import org.hibernate.annotations.OrderBy
 import org.hibernate.annotations.Type
 import java.util.*
 import javax.persistence.*
@@ -19,9 +20,12 @@ class Resume(
         val email: String = "",
         val summary: String = "",
         @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+        @OrderBy(clause = "position")
         val skillGroups: Set<SkillGroup>,
         @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+        @OrderBy(clause = "position")
         val education: Set<Education>,
         @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+        @OrderBy(clause = "position")
         val experience: Set<Experience>,
 )

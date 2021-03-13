@@ -7,6 +7,7 @@ CREATE TABLE public.education
     degree       character varying(255),
     graduation   character varying(255),
     school       character varying(255),
+    position     integer,
     resume_id    uuid
 );
 ALTER TABLE public.education OWNER TO postgres;
@@ -18,6 +19,7 @@ CREATE TABLE public.experience
     end_date      character varying(255),
     start_date    character varying(255),
     title         character varying(255),
+    position      integer,
     resume_id     uuid
 );
 ALTER TABLE public.experience OWNER TO postgres;
@@ -26,6 +28,7 @@ CREATE TABLE public.experience_bullet
 (
     bullet_id     uuid NOT NULL,
     name          character varying(1024),
+    position      integer,
     experience_id uuid
 );
 ALTER TABLE public.experience_bullet OWNER TO postgres;
@@ -34,6 +37,7 @@ CREATE TABLE public.experience_description
 (
     description_id uuid NOT NULL,
     name           character varying(1024),
+    position       integer,
     experience_id  uuid
 );
 ALTER TABLE public.experience_description OWNER TO postgres;
@@ -54,6 +58,7 @@ CREATE TABLE public.skill
 (
     skill_id uuid NOT NULL,
     name     character varying(255),
+    position integer,
     group_id uuid
 );
 ALTER TABLE public.skill OWNER TO postgres;
@@ -62,6 +67,7 @@ CREATE TABLE public.skill_group
 (
     skill_group_id uuid NOT NULL,
     name           character varying(255),
+    position       integer,
     experience_id  uuid,
     resume_id      uuid
 );

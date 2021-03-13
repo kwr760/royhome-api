@@ -1,6 +1,7 @@
 package net.royhome.api.model.resume
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import org.hibernate.annotations.OrderBy
 import org.hibernate.annotations.Type
 import java.util.*
 import javax.persistence.*
@@ -24,5 +25,6 @@ class SkillGroup(
 
     val name: String = "",
     @OneToMany(mappedBy = "skillGroup", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OrderBy(clause = "position")
     val skills: List<Skill>,
 )
