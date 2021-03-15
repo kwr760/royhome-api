@@ -28,4 +28,3 @@ class Experience private constructor(
     fun build() = Experience(title, company, description, bullets, techs, startDate, endDate)
   }
 }
-

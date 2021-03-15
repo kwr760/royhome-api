@@ -13,7 +13,7 @@ class MockRepository {
       .phone("425-111-22222")
       .displayPhone(true)
       .email("name@address.com")
-      .summary( "This is the summary" )
+      .summary("This is the summary")
       .addSkill(
         SkillGroup.Builder()
           .name("Languages")
@@ -59,6 +59,6 @@ class MockRepository {
       )
       .build()
 
-    return resume;
+    return resume
   }
 }

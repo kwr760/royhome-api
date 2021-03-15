@@ -17,8 +17,9 @@ class ResumeController(
   @GetMapping("resume")
   fun getResume(@RequestBody request: Request<GetResumeRequest>): Response<Resume> {
     return try {
-      val resume = service.getResume()
-      Response(resume, Result(true, 0))
+      val email = request.input!!.email
+      val resume = service.getResume(email)
+      Response(resume, Result(true, 0, "Success"))
     } catch (e: Exception) {
       Response(null, Result(false, 1, "Failure"))
     }
