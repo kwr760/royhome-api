@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableTransactionManagement
 class Application
 
+@Suppress("SpreadOperator")
 fun main(args: Array<String>) {
   runApplication<Application>(*args)
 }

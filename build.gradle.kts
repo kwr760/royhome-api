@@ -5,6 +5,7 @@ plugins {
   id("org.flywaydb.flyway") version "7.5.4"
   id("io.spring.dependency-management") version "1.0.11.RELEASE"
   id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+  id("io.gitlab.arturbosch.detekt") version "1.16.0"
   kotlin("jvm") version "1.4.21"
   kotlin("plugin.spring") version "1.4.21"
   kotlin("plugin.jpa") version "1.4.21"
@@ -27,10 +28,10 @@ configurations {
 }
 
 // apply from: "$rootDir/jacoco.gradle.kts"
-// apply (from = "$rootDir/ktlint.gradle.kts")
 
 repositories {
   mavenCentral()
+  jcenter()
   maven { url = uri("https://repo.spring.io/milestone") }
 }
 

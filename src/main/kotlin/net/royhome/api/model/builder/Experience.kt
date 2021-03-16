@@ -1,5 +1,6 @@
 package net.royhome.api.model.builder
 
+@Suppress("LongParameterList")
 class Experience private constructor(
   val title: String?,
   val company: String?,

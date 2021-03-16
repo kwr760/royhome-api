@@ -1,5 +1,6 @@
 package net.royhome.api.model.builder
 
+@Suppress("LongParameterList")
 class Resume private constructor(
   val name: String?,
   val address: String?,

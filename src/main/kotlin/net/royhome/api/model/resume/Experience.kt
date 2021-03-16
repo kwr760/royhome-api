@@ -3,7 +3,7 @@ package net.royhome.api.model.resume
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.OrderBy
 import org.hibernate.annotations.Type
-import java.util.UUID
+import java.util.*
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -17,6 +17,7 @@ import javax.persistence.OneToMany
 import javax.persistence.OneToOne
 
 @Entity
+@Suppress("LongParameterList")
 class Experience(
   @Id
   @Type(type = "pg-uuid")

@@ -6,6 +6,7 @@ import net.royhome.api.model.api.Result
 import net.royhome.api.model.api.request.GetResumeRequest
 import net.royhome.api.model.resume.Resume
 import net.royhome.api.service.ResumeService
+import org.springframework.dao.DataAccessException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -20,8 +21,9 @@ class ResumeController(
       val email = request.input!!.email
       val resume = service.getResume(email)
       Response(resume, Result(true, 0, "Success"))
-    } catch (e: Exception) {
-      Response(null, Result(false, 1, "Failure"))
+    } catch (e: DataAccessException) {
+      val error = e.message.toString()
+      Response(null, Result(false, 1, error))
     }
   }
 }
