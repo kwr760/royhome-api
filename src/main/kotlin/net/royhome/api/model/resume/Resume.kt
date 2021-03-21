@@ -2,7 +2,7 @@ package net.royhome.api.model.resume
 
 import org.hibernate.annotations.OrderBy
 import org.hibernate.annotations.Type
-import java.util.*
+import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity

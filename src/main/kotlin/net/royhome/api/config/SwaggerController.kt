@@ -12,5 +12,4 @@ class SwaggerController {
   @RequestMapping("/swagger")
   @Suppress("FunctionOnlyReturningConstant")
   fun swagger(): String = "redirect:/swagger-ui/"
-
 }
