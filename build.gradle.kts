@@ -55,12 +55,13 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("io.mockk:mockk:1.11.0")
 }
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "11"
+    jvmTarget = "1.8"
   }
 }
 tasks.withType<Test> {
@@ -86,7 +87,7 @@ tasks.jacocoTestReport {
 }
 
 val excludeList = listOf(
-  "net.royhome.api.ApplicationKt",
+  "net.royhome.api.Application*",
   "net.royhome.api.config.*",
   "net.royhome.api.model.*",
   "net.royhome.api.repository.*"
