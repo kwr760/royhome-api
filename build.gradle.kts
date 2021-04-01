@@ -67,6 +67,19 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
   useJUnitPlatform()
 }
+tasks.register("bootRunDev") {
+  group = "application"
+  description = "Runs the Spring Boot application with the dev profile"
+  doFirst {
+    tasks.bootRun.configure {
+      systemProperty("spring.profiles.active", "dev")
+    }
+  }
+  finalizedBy("bootRun")
+}
+tasks.bootRun {
+  systemProperties(System.getProperties().toMap() as Map<String, Object>)
+}
 tasks.test {
   finalizedBy(tasks.jacocoTestReport)
 }
@@ -124,9 +137,4 @@ tasks.jacocoTestCoverageVerification {
 }
 jacoco {
   toolVersion = "0.8.6"
-}
-flyway {
-  url = "jdbc:postgresql://localhost:5432/newhome"
-  user = "postgres"
-  password = "v7starap"
 }
