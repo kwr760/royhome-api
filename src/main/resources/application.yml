@@ -1,0 +1,35 @@
+#SSL Key Info
+#security:
+#  require-ssl: true
+
+server:
+  tomcat:
+    basedir: ${application.home}
+    threads:
+      max: 100
+    accesslog:
+      enabled: on
+  ssl:
+    key-store-password: ${ROYHOME_SSL_PASSWORD}
+    key-store: /var/cert/royk.us/cert.jks
+    key-store-type: PKCS12
+    enabled: true
+  port: 8443
+  error:
+    include-message: always
+    include-exception: true
+    include-stacktrace: always
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL92Dialect
+        ddl-auto: validate
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    baseline-on-migrate: true
+  datasource:
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
