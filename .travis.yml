@@ -1,6 +1,6 @@
 language: java
 os: linux
-dist: precise
+dist: bionic
 jdk:
 - openjdk11
 jobs:
