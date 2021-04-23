@@ -8,7 +8,7 @@ jobs:
   - stage: Test Pull Request
     script:
     - "./gradlew test build"
-    if: type = pull_request
+    if: type = push
   - stage: Deploy to Production
     script:
     - "./.travis/deploy.sh"
