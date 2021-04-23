@@ -1,6 +1,9 @@
 language: java
 jdk:
   - openjdk11
+before_install:
+  - chmod +x gradlew
+  - chmod +x gradle/wrapper/gradle-wrapper.jar
 jobs:
   include:
     - stage: Test Pull Request
@@ -11,9 +14,6 @@ jobs:
       script:
         - "./.travis/deploy.sh"
       if: type = push AND branch = master
-before_install:
-  - chmod +x gradlew
-  - chmod +x gradle/wrapper/gradle-wrapper.jar
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
