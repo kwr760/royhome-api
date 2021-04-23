@@ -101,6 +101,7 @@ tasks.jacocoTestReport {
 val excludeList = listOf(
   "net.royhome.api.Application*",
   "net.royhome.api.config.*",
+  "net.royhome.api.constant.*",
   "net.royhome.api.model.*",
   "net.royhome.api.repository.*"
 )
