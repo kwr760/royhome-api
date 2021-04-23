@@ -6,14 +6,14 @@ before_install:
   - chmod +x gradle/wrapper/gradle-wrapper.jar
 jobs:
   include:
-    - stage: Test Pull Request
-      script:
-        - ./gradlew test build
-      if: type = pull_request
-    - stage: Deploy to Production
-      script:
-        - "./.travis/deploy.sh"
-      if: type = push AND branch = master
+  - stage: Test Pull Request
+    script:
+    - ./gradlew test build
+    if: type = pull_request
+  - stage: Deploy to Production
+    script:
+    - "./.travis/deploy.sh"
+    if: type = push AND branch = master
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
