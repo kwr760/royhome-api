@@ -11,10 +11,10 @@ server:
       enabled: on
   ssl:
     key-store-password: ${ROYHOME_SSL_PASSWORD}
-    key-store: /var/cert/royk.us/cert.jks
+    key-store: /var/cert/royhome/cert.jks
     key-store-type: PKCS12
     enabled: true
-  port: 8443
+  port: ${SERVER_PORT}
   error:
     include-message: always
     include-exception: true
