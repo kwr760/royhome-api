@@ -1,6 +1,4 @@
 language: java
-os: linux
-dist: precise
 jdk:
 - openjdk11
 jobs:
