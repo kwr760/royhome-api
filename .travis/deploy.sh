@@ -17,4 +17,5 @@ echo -e "\nRemote:  copy new code to stage"
 ssh $RELEASE_HOST 'sudo /var/scripts/install-repo.sh royhome-api prod'
 
 # Don't forget to cleanup your agent after you're done using it if you're not on an ephemeral build server.
+echo -e "\nDone.\n"
 ssh-agent -k
