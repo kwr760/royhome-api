@@ -16,4 +16,3 @@ Some environment variables are required to run
 | POSTGRES_USERNAME | Postgres' username |
 | POSTGRES_PASSWORD | Postgres' password |
 
-
