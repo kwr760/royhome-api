@@ -42,5 +42,5 @@ class Experience(
   val bullets: Set<ExperienceBullet>,
   @OneToOne(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   @OrderBy(clause = "position")
-  val skills: SkillGroup,
+  val tech: SkillGroup,
 )

@@ -3,10 +3,8 @@ package net.royhome.api.controller
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import net.royhome.api.model.api.Request
 import net.royhome.api.model.api.Response
 import net.royhome.api.model.api.Result
-import net.royhome.api.model.api.request.GetResumeRequest
 import net.royhome.api.model.resume.Resume
 import net.royhome.api.service.ResumeService
 import org.junit.jupiter.api.Assertions
@@ -28,11 +26,7 @@ class ResumeControllerTests {
   @Test
   fun `resumeController accepts request and returns response`() {
     // Arrange - input
-    val request: Request<GetResumeRequest> = mockk()
-    val email: String = "person@email.com"
-    val input: GetResumeRequest = mockk()
-    every { input.email } returns email
-    every { request.input } returns input
+    val email = "person@email.com"
     // Arrange - mocks
     val resumeMock: Resume = mockk()
     every { resumeServiceMock.getResume(any()) } answers { resumeMock }
@@ -40,7 +34,7 @@ class ResumeControllerTests {
     val expectedResponse: Response<Resume> = Response(resumeMock, Result(true, 0, "Success"))
 
     // Act
-    val response = underTest.getResume(request)
+    val response = underTest.getResume(email)
 
     // Assert
     Assertions.assertEquals(expectedResponse, response)
@@ -50,11 +44,7 @@ class ResumeControllerTests {
   @Test
   fun `resumeController handles exception well`() {
     // Arrange - input
-    val request: Request<GetResumeRequest> = mockk()
-    val email: String = "person@email.com"
-    val input: GetResumeRequest = mockk()
-    every { input.email } returns email
-    every { request.input } returns input
+    val email = "person@email.com"
     // Arrange - mocks
     val errorMessage = "Error Message"
     val exception: DataAccessException = DataRetrievalFailureException(errorMessage)
@@ -63,7 +53,7 @@ class ResumeControllerTests {
     val expectedResponse: Response<Resume> = Response(null, Result(false, 1, errorMessage))
 
     // Act
-    val response = underTest.getResume(request)
+    val response = underTest.getResume(email)
 
     // Assert
     Assertions.assertEquals(expectedResponse, response)
