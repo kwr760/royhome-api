@@ -11,6 +11,7 @@ jobs:
     if: type = pull_request
   - stage: Deploy to Production
     script:
+    - "./gradlew build"
     - "./.travis/deploy.sh"
     if: type = push AND branch = master
 before_cache:

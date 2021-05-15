@@ -14,9 +14,9 @@ echo -e "\nTravis:  openssl rm"
 rm private-key .travis/secrets.tar
 
 pwd
-echo ssh $RELEASE_HOST 'sudo rm -rf /var/app/royhome-api/deploy'
-echo scp -r /home/travis/build/kwr760/royhome-api server@45.79.110.249:/var/app/royhome-api/deploy
-echo ssh $RELEASE_HOST 'sudo ls -l /var/app/royhome-api/deploy'
+ssh $RELEASE_HOST 'sudo rm -rf /var/app/royhome-api/deploy'
+scp -r /home/travis/build/kwr760/royhome-api server@45.79.110.249:/var/app/royhome-api/deploy
+ssh $RELEASE_HOST 'sudo ls -l /var/app/royhome-api/deploy'
 
 echo -e "\nRemote:  copy new code to stage"
 ssh $RELEASE_HOST 'sudo /var/scripts/install-repo.sh royhome-api prod'
