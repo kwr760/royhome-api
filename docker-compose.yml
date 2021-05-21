@@ -8,14 +8,13 @@ services:
       dockerfile: Dockerfile
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-    volumes:
-      - .:/var/app/royhome-api
     ports:
       - "5000:5000"
     links:
       - local-db
     depends_on:
       - flyway
+      - local-db
 
   flyway:
     image: flyway/flyway
@@ -23,6 +22,8 @@ services:
     volumes:
       - ./src:/flyway/sql
     links:
+      - local-db
+    depends_on:
       - local-db
 
   local-db:

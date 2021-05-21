@@ -1,9 +1,8 @@
 FROM gradle:6.7.1-jdk11 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
+COPY --chown=gradle:gradle . /var/gradle/src
+WORKDIR /var/gradle/src
 RUN gradle build --no-daemon
 
 FROM openjdk:11-jre-slim
-WORKDIR /var/app/royhome-api
-COPY . .
-ENTRYPOINT ["java","-jar","build/libs/royhome-api-0.0.1-SNAPSHOT.jar"]
+COPY --from=build /var/gradle/src/build/libs/*.jar /var/app/royhome-api.jar
+ENTRYPOINT ["java","-jar","/var/app/royhome-api.jar"]
