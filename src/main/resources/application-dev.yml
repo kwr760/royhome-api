@@ -2,8 +2,6 @@ server:
   tomcat:
     accesslog:
       enabled: off
-  ssl:
-    enabled: false
   port: 5000
 
 spring:
