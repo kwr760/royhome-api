@@ -16,7 +16,7 @@ rm private-key .travis/secrets.tar
 pwd
 ssh $RELEASE_HOST 'sudo rm -rf /var/app/royhome-api/deploy'
 scp -r /home/travis/build/kwr760/royhome-api $RELEASE_HOST:/var/app/royhome-api/deploy
-ssh $RELEASE_HOST 'sudo ls -l /var/app/royhome-api/deploy'
+ssh $RELEASE_HOST 'sudo rm /var/log/royhome/royhome-api.log'
 
 echo -e "\nRemote:  copy new code to stage"
 ssh $RELEASE_HOST 'sudo /var/scripts/install-repo.sh royhome-api prod'
