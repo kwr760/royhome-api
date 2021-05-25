@@ -13,5 +13,5 @@ Some environment variables are required to run
 | Variable | Use |
 | -------- | --- |
 | ROYHOME_SSL_PASSWORD | Used to HTTPS pks |
-| POSTGRES_USERNAME | Postgres' username |
+| POSTGRES_USER | Postgres' username |
 | POSTGRES_PASSWORD | Postgres' password |

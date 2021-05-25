@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "5000:5000"
+    links:
+      - local-db
+    depends_on:
+      - flyway
+      - local-db
+
+  flyway:
+    image: flyway/flyway
+    command: -url=jdbc:postgresql://local-db:5432/royHome -user=postgres -password=postgres -connectRetries=60 migrate
+    volumes:
+      - ./src:/flyway/sql
+    links:
+      - local-db
+    depends_on:
+      - local-db
+
+  local-db:
+    image: "postgres"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=royHome

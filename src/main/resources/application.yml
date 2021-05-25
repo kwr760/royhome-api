@@ -31,5 +31,5 @@ spring:
     encoding: UTF-8
     baseline-on-migrate: true
   datasource:
-    username: ${POSTGRES_USERNAME}
+    username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
