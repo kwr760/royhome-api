@@ -8,4 +8,4 @@ spring:
   datasource:
     username: postgres
     password: password
-    url: jdbc:postgresql://localhost:5432/royHomeTest
+    url: jdbc:postgresql://localhost:5432/royHome
