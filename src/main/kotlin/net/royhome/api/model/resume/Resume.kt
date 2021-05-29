@@ -36,4 +36,7 @@ class Resume(
   @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   @OrderBy(clause = "position")
   val experience: Set<Experience>,
+  @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+  @OrderBy(clause = "position")
+  val project: Set<Project>,
 )
