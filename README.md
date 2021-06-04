@@ -15,3 +15,13 @@ Some environment variables are required to run
 | ROYHOME_SSL_PASSWORD | Used to HTTPS pks |
 | POSTGRES_USER | Postgres' username |
 | POSTGRES_PASSWORD | Postgres' password |
+
+Update
+
+### Flyway steps
+
+### psql hints
+
+### CICD
+
+overview - travis - systemd - startup
