@@ -35,7 +35,7 @@ with these environments set.
   the pks.  Used to run docker containers.
 
 An additional way to set the active spring profile.
-```
+```text
 -Dspring.profiles.active=dev
 ```
 
@@ -43,16 +43,32 @@ An additional way to set the active spring profile.
 
 This server uses a Postgres database.  
 
-version
-```
-production - postgres (PostgreSQL) 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
-development - postgres (PostgreSQL) 10.17 (Ubuntu 10.17-0ubuntu0.18.04.1)
-```
-
 A local instance of the database can be installed and used. 
 
 To simplify a user trying to run this server.  The server can be used 
 running docker.  See below on the start this server with docker.
+
+#### version
+```text
+production - postgres (PostgreSQL) 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
+development - postgres (PostgreSQL) 10.17 (Ubuntu 10.17-0ubuntu0.18.04.1)
+```
+
+#### installing postgres
+```shell
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+```
+
+#### create database
+```shell
+sudo -u postgres createdb royhome
+```
+
+#### starting psql
+```shell
+sudo -u postgres psql
+```
 
 ### Running
 
@@ -63,7 +79,7 @@ Most IDE will let you run this through their UI.  As is different, I'll
 go through running on the command line.
 
 Example: Development
-```
+```shell
 gradlew -Dspring.profiles.active=dev bootrun
 ```
 
@@ -72,13 +88,13 @@ gradlew -Dspring.profiles.active=dev bootrun
 Assuming that docker has been installed as expected.  This should run out of the box.
 
 docker versions
-```
+```text
 Docker version 20.10.7, build f0df350
 docker-compose version 1.27.4, build 40524192
 ```
 
 To start
-```
+```shell
 docker-compose up
 ```
 
@@ -89,7 +105,7 @@ The easiest option here is to run as http, but as you know this is not as secure
 ### Running as http
 
 to turn off https change the correct application.yml
-```
+```yaml
 server.ssl.enabled: false
 ```
 
@@ -104,7 +120,7 @@ To do this you need to own an url, and create the keys using letsencrypt or some
 I am using letsencrypt.
 
 See
-```
+```shell
 https://github.com/kwr760/royhome-web
 ```
 
@@ -112,7 +128,7 @@ https://github.com/kwr760/royhome-web
 
 The pks file is generated from the certificate files.
 
-```
+```shell
 # Convert the pem to p12
 openssl pkcs12 -export -inkey $LOCATION/privkey.pem -in $LOCATION/fullchain.pem -name royhome -out $LOCATION/cert.p12 -passout pass:$PASSWORD
 # convert the p12 to jks (java prefered cert)
@@ -128,7 +144,7 @@ Running flyway requires a flyway.cfg to be in the home directory.  There are oth
 to be the easiest way without adding configuration to github.
 
 ### flyway.cfg
-```
+```lombok.config
 flyway.url=jdbc:postgresql://localhost:5432/royHome
 flyway.user=postgres
 flyway.password=password
@@ -137,12 +153,12 @@ flyway.encoding=UTF-8
 
 ### create or upgrade the royhome database
 On an empty database, 
-```
+```shell
 gradlew flywaymigrate
 ```
 
 To see the state of the flyway database
-```
+```shell
 gradlew flywayinfo
 ```
 
