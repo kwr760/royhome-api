@@ -2,6 +2,8 @@ server:
   tomcat:
     accesslog:
       enabled: off
+  ssl:
+    key-store: /local/cert/royhome/cert.jks
   port: 5000
 
 spring:
