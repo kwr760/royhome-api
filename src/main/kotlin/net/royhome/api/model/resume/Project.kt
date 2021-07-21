@@ -3,16 +3,10 @@ package net.royhome.api.model.resume
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.Type
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Entity
+@Table(schema = "resume")
 @Suppress("LongParameterList")
 class Project(
   @Id

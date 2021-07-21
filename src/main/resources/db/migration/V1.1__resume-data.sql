@@ -1,25 +1,25 @@
-INSERT INTO public.resume(resume_id, address, display_phone, email, name, phone, summary)
+INSERT INTO resume.resume(resume_id, address, display_phone, email, name, phone, summary)
 VALUES (uuid_generate_v4(), 'Issaquah, WA  98027', false, 'kroy760@gmail.com', 'Kevin Roy', '(425) 208-1223',
         'Diligent, Independent, Articulate.  Experienced Web Developer.  Prefers backend, enjoys UI considers ' ||
         'myself full stack. I have broad professional experience, looking to continue to focus on developing ' ||
         'complex application in a professional engineering environment.');
-INSERT INTO education(education_id, degree, school, graduation, position, resume_id)
+INSERT INTO resume.education(education_id, degree, school, graduation, position, resume_id)
 SELECT education_id, degree, school, graduation, position, resume_id
 FROM (VALUES (uuid_generate_v4(), 'Master of Science in Computer Science', ' University of Massachusetts at Lowell', 1,
               '2001-02-01'),
              (uuid_generate_v4(), 'Bachelor of Science in Computer Science', ' Worcester Polytechnic Institute', 2,
               '1994-05-01')
      ) AS data(education_id, degree, school, position, graduation)
-         JOIN resume ON email = 'kroy760@gmail.com';
-INSERT INTO skill_group(skill_group_id, name, position, experience_id, resume_id)
+         JOIN resume.resume ON email = 'kroy760@gmail.com';
+INSERT INTO resume.skill_group(skill_group_id, name, position, experience_id, resume_id)
 SELECT uuid_generate_v4(), skill, position, null, resume_id
 FROM (VALUES ('Languages', 1),
              ('Frameworks', 2),
              ('Tools', 3),
              ('Databases', 4)
      ) AS data(skill, position)
-         JOIN resume ON email = 'kroy760@gmail.com';
-INSERT INTO skill(skill_id, name, position, group_id)
+         JOIN resume.resume ON email = 'kroy760@gmail.com';
+INSERT INTO resume.skill(skill_id, name, position, group_id)
 SELECT uuid_generate_v4(), skill, pos, skill_group.skill_group_id
 FROM (VALUES ('Languages', 'TypeScript', 1),
              ('Languages', 'JavaScript', 2),
@@ -68,21 +68,21 @@ FROM (VALUES ('Languages', 'TypeScript', 1),
              ('Tools', 'PhantomJS', 13),
              ('Tools', 'ClearCase', 14)
      ) AS data(skill_group, skill, pos)
-         JOIN skill_group ON name = skill_group;
-INSERT INTO experience(experience_id, company, end_date, start_date, title, position, resume_id)
+         JOIN resume.skill_group ON name = skill_group;
+INSERT INTO resume.experience(experience_id, company, end_date, start_date, title, position, resume_id)
 SELECT uuid_generate_v4(), company, end_date, start_date, title, pos, resume_id
-FROM (VALUES (1, 'Software Development Engineer III', 'Expedia Group', '2018-06-25', NULL, 1),
-             (2, 'Technical Lead', 'Sterling Talent Solutions', '2012-05-01', '2018-06-25', 2),
-             (3, 'Senior Software Engineer', 'Applied Discovery, Inc.', '2010-10-01', '2012-04-01', 3),
-             (4, 'Software Engineer/Technical Lead', 'SofTech, Inc.', '2001-03-01', '2010-10-01', 4),
-             (5, 'Contractor/Software Engineer', 'OrderTrust', '2000-02-01', '2001-03-01', 5),
-             (6, 'Software Engineer', 'PSW Technology', '1999-04-01', '2000-02-01', 6),
-             (7, 'Contractor', 'Celestica, Inc.', '1997-05-01', '1999-04-01', 7),
-             (8, 'Project Leader/Software Engineer', 'Boston Technology, Inc.', '1995-12-01', '1997-05-01', 8),
-             (9, 'Software Engineer', 'ESSENSE Systems, Inc.', '1994-08-01', '1995-12-01', 9)
+FROM (VALUES (1, 'Software Development Engineer III', 'Expedia Group', '2018-06-25'::date, null, 1),
+             (2, 'Technical Lead', 'Sterling Talent Solutions', '2012-05-01'::date, '2018-06-25'::date, 2),
+             (3, 'Senior Software Engineer', 'Applied Discovery, Inc.', '2010-10-01'::date, '2012-04-01'::date, 3),
+             (4, 'Software Engineer/Technical Lead', 'SofTech, Inc.', '2001-03-01'::date, '2010-10-01'::date, 4),
+             (5, 'Contractor/Software Engineer', 'OrderTrust', '2000-02-01'::date, '2001-03-01'::date, 5),
+             (6, 'Software Engineer', 'PSW Technology', '1999-04-01'::date, '2000-02-01'::date, 6),
+             (7, 'Contractor', 'Celestica, Inc.', '1997-05-01'::date, '1999-04-01'::date, 7),
+             (8, 'Project Leader/Software Engineer', 'Boston Technology, Inc.', '1995-12-01'::date, '1997-05-01'::date, 8),
+             (9, 'Software Engineer', 'ESSENSE Systems, Inc.', '1994-08-01'::date, '1995-12-01'::date, 9)
      ) AS data(position, title, company, start_date, end_date, pos)
-         JOIN resume ON email = 'kroy760@gmail.com';
-INSERT INTO experience_description(description_id, name, position, experience_id)
+         JOIN resume.resume ON email = 'kroy760@gmail.com';
+INSERT INTO resume.experience_description(description_id, name, position, experience_id)
 SELECT uuid_generate_v4(), item, pos, experience_id
 FROM (VALUES ('Expedia Group', 1, 'text',
               'Worked in an organization responsible for the messaging tool for customer agents.  This tool connects the ' ||
@@ -125,8 +125,8 @@ FROM (VALUES ('Expedia Group', 1, 'text',
              ('ESSENSE Systems, Inc.', 1, 'text',
               'Developed aspects of a data-driven GUI that empowered employees to manage their own human resource records.')
      ) AS data(item_company, pos, type, item)
-         JOIN experience ON company = item_company;
-INSERT INTO experience_bullet(bullet_id, name, position, experience_id)
+         JOIN resume.experience ON company = item_company;
+INSERT INTO resume.experience_bullet(bullet_id, name, position, experience_id)
 SELECT uuid_generate_v4(), item, pos, experience_id
 FROM (VALUES ('Expedia Group', 1, 'bullet',
               'Branded the Agent Messaging Tool: the project took the existing styling and converted it to our branded ' ||
@@ -207,8 +207,8 @@ FROM (VALUES ('Expedia Group', 1, 'bullet',
               'Determined report needs of users that included finding lost workstations and bottlenecks and implemented ' ||
               'intranet-accessible reports using C, KornShell, HTML and Sapphire CGI generator.')
      ) AS data(item_company, pos, type, item)
-         JOIN experience ON company = item_company;
-INSERT INTO skill_group(skill_group_id, name, position, experience_id, resume_id)
+         JOIN resume.experience ON company = item_company;
+INSERT INTO resume.skill_group(skill_group_id, name, position, experience_id, resume_id)
 SELECT uuid_generate_v4(), name, pos, experience_id, null
 FROM (VALUES ('Expedia Group', 'Technology', 1),
              ('Sterling Talent Solutions', 'Technology', 1),
@@ -220,8 +220,8 @@ FROM (VALUES ('Expedia Group', 'Technology', 1),
              ('Boston Technology, Inc.', 'Technology', 1),
              ('ESSENSE Systems, Inc.', 'Technology', 1)
      ) AS data(item_company, name, pos)
-         JOIN experience ON company = item_company;
-INSERT INTO skill(skill_id, name, position, group_id)
+         JOIN resume.experience ON company = item_company;
+INSERT INTO resume.skill(skill_id, name, position, group_id)
 SELECT uuid_generate_v4(), item, pos, skill_group_id
 FROM (VALUES ('Expedia Group', 1, 'tech', 'Ubuntu'),
              ('Expedia Group', 2, 'tech', 'React'),
@@ -271,5 +271,5 @@ FROM (VALUES ('Expedia Group', 1, 'tech', 'Ubuntu'),
              ('Boston Technology, Inc.', 2, 'tech', 'SCO Unix'),
              ('Boston Technology, Inc.', 3, 'tech', 'SQL')
      ) AS data(item_company, pos, type, item)
-         JOIN experience ON company = item_company
-         JOIN skill_group ON skill_group.experience_id = experience.experience_id;
+         JOIN resume.experience ON company = item_company
+         JOIN resume.skill_group ON skill_group.experience_id = experience.experience_id;
