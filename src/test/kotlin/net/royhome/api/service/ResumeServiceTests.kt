@@ -3,7 +3,7 @@ package net.royhome.api.service
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import net.royhome.api.model.resume.Resume
+import net.royhome.api.model.db.resume.Resume
 import net.royhome.api.repository.ResumeRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -20,7 +20,7 @@ class ResumeServiceTests {
   }
 
   @Test
-  fun `resumeController accepts request and returns response`() {
+  fun `resumeService getResume`() {
     // Arrange - input
     val email = "person@email.com"
     // Arrange - mocks

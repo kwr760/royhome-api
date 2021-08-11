@@ -1,6 +1,6 @@
 package net.royhome.api.service
 
-import net.royhome.api.model.resume.Resume
+import net.royhome.api.model.db.resume.Resume
 import net.royhome.api.repository.ResumeRepository
 import org.springframework.stereotype.Service
 

@@ -1,10 +1,8 @@
 package net.royhome.api.repository
 
-import net.royhome.api.model.db.resume.Resume
+import net.royhome.api.model.db.session.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ResumeRepository : JpaRepository<Resume, Long> {
-  fun findByEmail(email: String): Resume
-}
+interface UserRepository : JpaRepository<User, Long>

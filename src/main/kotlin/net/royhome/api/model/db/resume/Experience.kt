@@ -1,4 +1,4 @@
-package net.royhome.api.model.resume
+package net.royhome.api.model.db.resume
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.OrderBy

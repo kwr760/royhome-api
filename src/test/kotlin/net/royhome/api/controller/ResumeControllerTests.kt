@@ -5,13 +5,17 @@ import io.mockk.mockk
 import io.mockk.verify
 import net.royhome.api.model.api.Response
 import net.royhome.api.model.api.Result
-import net.royhome.api.model.resume.Resume
+import net.royhome.api.model.db.resume.Resume
 import net.royhome.api.service.ResumeService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataRetrievalFailureException
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import java.net.http.HttpResponse
 
 class ResumeControllerTests {
   private lateinit var underTest: ResumeController
@@ -31,7 +35,7 @@ class ResumeControllerTests {
     val resumeMock: Resume = mockk()
     every { resumeServiceMock.getResume(any()) } answers { resumeMock }
     // Arrange - response
-    val expectedResponse: Response<Resume> = Response(resumeMock, Result(true, 0, "Success"))
+    val expectedResponse = ResponseEntity.ok(Response(resumeMock, Result(true, "Success")))
 
     // Act
     val response = underTest.getResume(email)
@@ -50,7 +54,9 @@ class ResumeControllerTests {
     val exception: DataAccessException = DataRetrievalFailureException(errorMessage)
     every { resumeServiceMock.getResume(any()) } throws exception
     // Arrange - response
-    val expectedResponse: Response<Resume> = Response(null, Result(false, 1, errorMessage))
+    val expectedResponse = ResponseEntity.status(
+      HttpStatus.INTERNAL_SERVER_ERROR).body(Response(null, Result(false, errorMessage))
+    )
 
     // Act
     val response = underTest.getResume(email)

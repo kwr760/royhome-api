@@ -1,4 +1,4 @@
-package net.royhome.api.model.resume
+package net.royhome.api.model.db.resume
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.Type
@@ -15,11 +15,12 @@ import javax.persistence.Table
 
 @Entity
 @Table(schema = "resume")
-class Education(
+@Suppress("LongParameterList")
+class Project(
   @Id
   @Type(type = "pg-uuid")
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "education_id")
+  @Column(name = "project_id")
   val id: UUID = UUID.randomUUID(),
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -27,7 +28,9 @@ class Education(
   @JsonBackReference
   val resume: Resume,
 
-  val school: String = "",
-  val degree: String = "",
-  val graduation: String = "",
+  val name: String = "",
+  val url: String = "",
+  val description: String = "",
+  val startDate: String? = null,
+  val endDate: String? = null,
 )

@@ -3,6 +3,28 @@ CREATE SCHEMA IF NOT EXISTS resume;
 CREATE
 EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
+CREATE OR REPLACE FUNCTION modify_stats_when_changed()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF row(NEW.*) IS DISTINCT FROM row(OLD.*) THEN
+    NEW.changed = OLD.changed + 1;
+    NEW.modified = now();
+RETURN NEW;
+ELSE
+    RETURN OLD;
+END IF;
+END;
+$$ language 'plpgsql';
+
+CREATE OR REPLACE FUNCTION modify_stats()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.changed = OLD.changed + 1;
+  NEW.modified = now();
+RETURN NEW;
+END;
+$$ language 'plpgsql';
+
 CREATE TABLE IF NOT EXISTS resume.education
 (
     education_id uuid NOT NULL,
@@ -10,9 +32,13 @@ CREATE TABLE IF NOT EXISTS resume.education
     graduation   varchar(255),
     school       varchar(255),
     position     int,
-    resume_id    uuid
+    resume_id    uuid,
+    created      timestamp default now(),
+    modified     timestamp default now(),
+    changed      int default 1
 );
 ALTER TABLE resume.education OWNER TO postgres;
+CREATE TRIGGER update_resume_education BEFORE UPDATE ON resume.education FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 CREATE TABLE resume.experience
 (
@@ -22,27 +48,39 @@ CREATE TABLE resume.experience
     start_date    date,
     title         varchar(255),
     position      int,
-    resume_id     uuid
+    resume_id     uuid,
+    created       timestamp default now(),
+    modified      timestamp default now(),
+    changed       int default 1
 );
 ALTER TABLE resume.experience OWNER TO postgres;
+CREATE TRIGGER update_resume_experience BEFORE UPDATE ON resume.experience FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 CREATE TABLE resume.experience_bullet
 (
     bullet_id     uuid NOT NULL,
     name          varchar(1024),
     position      int,
-    experience_id uuid
+    experience_id uuid,
+    created       timestamp default now(),
+    modified      timestamp default now(),
+    changed       int default 1
 );
 ALTER TABLE resume.experience_bullet OWNER TO postgres;
+CREATE TRIGGER update_resume_experience_bullet BEFORE UPDATE ON resume.experience_bullet FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 CREATE TABLE resume.experience_description
 (
     description_id uuid NOT NULL,
     name           varchar(1024),
     position       int,
-    experience_id  uuid
+    experience_id  uuid,
+    created        timestamp default now(),
+    modified       timestamp default now(),
+    changed        int default 1
 );
 ALTER TABLE resume.experience_description OWNER TO postgres;
+CREATE TRIGGER update_resume_description BEFORE UPDATE ON resume.experience_description FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 CREATE TABLE resume.resume
 (
@@ -52,18 +90,26 @@ CREATE TABLE resume.resume
     email         varchar(255),
     name          varchar(255),
     phone         varchar(255),
-    summary       varchar(1024)
+    summary       varchar(1024),
+    created       timestamp default now(),
+    modified      timestamp default now(),
+    changed       int default 1
 );
 ALTER TABLE resume.resume OWNER TO postgres;
+CREATE TRIGGER update_resume_resume BEFORE UPDATE ON resume.resume FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 CREATE TABLE resume.skill
 (
     skill_id uuid NOT NULL,
     name     varchar(255),
     position int,
-    group_id uuid
+    group_id uuid,
+    created  timestamp default now(),
+    modified timestamp default now(),
+    changed  int default 1
 );
 ALTER TABLE resume.skill OWNER TO postgres;
+CREATE TRIGGER update_resume_skill BEFORE UPDATE ON resume.skill FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 CREATE TABLE resume.skill_group
 (
@@ -71,9 +117,13 @@ CREATE TABLE resume.skill_group
     name           varchar(255),
     position       int,
     experience_id  uuid,
-    resume_id      uuid
+    resume_id      uuid,
+    created        timestamp default now(),
+    modified       timestamp default now(),
+    changed        int default 1
 );
 ALTER TABLE resume.skill_group OWNER TO postgres;
+CREATE TRIGGER update_resume_skill_group BEFORE UPDATE ON resume.skill_group FOR EACH ROW EXECUTE PROCEDURE modify_stats_when_changed();
 
 ALTER TABLE ONLY resume.education ADD CONSTRAINT education_pkey PRIMARY KEY (education_id);
 ALTER TABLE ONLY resume.experience_bullet ADD CONSTRAINT experience_bullet_pkey PRIMARY KEY (bullet_id);
