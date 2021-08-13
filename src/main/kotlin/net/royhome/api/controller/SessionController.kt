@@ -40,15 +40,11 @@ class SessionController(
 
   @PostMapping("session")
   fun saveSession(
-//    request: HttpServletRequest,
     @RequestBody claim: JwtClaim,
-//    @RequestBody body: Any,
-//    @RequestHeader headers: Map<String, String>,
     @CookieValue("session-id") sessionId: UUID,
     @CookieValue("browser-id") browserId: UUID,
   ): ResponseEntity<Response<Session>> {
     return try {
-      println(claim)
       val session = service.saveSession(sessionId, browserId, claim)
       ResponseEntity.ok(Response(session, Result(true, Constant.SUCCESS)))
     } catch (e: DataAccessException) {
