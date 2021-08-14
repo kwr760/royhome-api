@@ -4,10 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import net.royhome.api.model.api.session.JwtClaim
-import net.royhome.api.model.db.resume.Resume
 import net.royhome.api.model.db.session.Session
 import net.royhome.api.model.db.session.User
-import net.royhome.api.repository.ResumeRepository
 import net.royhome.api.repository.SessionRepository
 import net.royhome.api.repository.UserRepository
 import org.junit.jupiter.api.Assertions
@@ -52,7 +50,7 @@ class SessionServiceTests {
     val email = "person@email.com"
     val darkMode = "dark-mode"
     val context = "context"
-    val claim  = JwtClaim(expiration, userId, email, darkMode, context)
+    val claim = JwtClaim(expiration, userId, email, darkMode, context)
     val browserId = UUID.randomUUID()
     val sessionId = UUID.randomUUID()
     // Arrange - mocks
@@ -74,7 +72,7 @@ class SessionServiceTests {
   fun `saveSession save session without claim in repository`() {
     // Arrange - input
     val expiration = 1000L
-    val claim  = JwtClaim()
+    val claim = JwtClaim()
     val browserId = UUID.randomUUID()
     val sessionId = UUID.randomUUID()
     // Arrange - mocks
@@ -94,11 +92,11 @@ class SessionServiceTests {
     // Arrange - input
     val expiration = 0L
     val email = "person@email.com"
-    val claim  = JwtClaim(expiration = expiration, email = email)
+    val claim = JwtClaim(expiration = expiration, email = email)
     val browserId = UUID.randomUUID()
     val sessionId = UUID.randomUUID()
     // Arrange - mocks
-    val session = Session(sessionId, browserId, Timestamp(expiration) )
+    val session = Session(sessionId, browserId, Timestamp(expiration))
     val user = User(email = email)
     session.user = user
     every { sessionRepositoryMock.save(any()) } answers { session }

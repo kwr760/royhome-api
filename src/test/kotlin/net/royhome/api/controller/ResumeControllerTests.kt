@@ -12,10 +12,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataRetrievalFailureException
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.net.http.HttpResponse
 
 class ResumeControllerTests {
   private lateinit var underTest: ResumeController
@@ -54,9 +52,9 @@ class ResumeControllerTests {
     val exception: DataAccessException = DataRetrievalFailureException(errorMessage)
     every { resumeServiceMock.getResume(any()) } throws exception
     // Arrange - response
-    val expectedResponse = ResponseEntity.status(
-      HttpStatus.INTERNAL_SERVER_ERROR).body(Response(null, Result(false, errorMessage))
-    )
+    val expectedResponse = ResponseEntity
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .body(Response(null, Result(false, errorMessage)))
 
     // Act
     val response = underTest.getResume(email)
