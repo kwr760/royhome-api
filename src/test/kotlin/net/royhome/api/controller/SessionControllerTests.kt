@@ -96,7 +96,7 @@ class SessionControllerTests {
     val email = "person@email.com"
     val darkMode = "dark-mode"
     val context = "context"
-    val claim  = JwtClaim(expiration, userId, email, darkMode, context)
+    val claim = JwtClaim(expiration, userId, email, darkMode, context)
     val browserId = UUID.randomUUID()
     val sessionId = UUID.randomUUID()
     // Arrange - mocks
@@ -121,7 +121,7 @@ class SessionControllerTests {
     val email = "person@email.com"
     val darkMode = "dark-mode"
     val context = "context"
-    val claim  = JwtClaim(expiration, userId, email, darkMode, context)
+    val claim = JwtClaim(expiration, userId, email, darkMode, context)
     val browserId = UUID.randomUUID()
     val sessionId = UUID.randomUUID()
     // Arrange - mocks
@@ -130,7 +130,9 @@ class SessionControllerTests {
     every { sessionServiceMock.saveSession(any(), any(), any()) } throws exception
     // Arrange - response
     val expectedResponse = ResponseEntity.status(
-      HttpStatus.INTERNAL_SERVER_ERROR).body(Response(null, Result(false, errorMessage))
+      HttpStatus.INTERNAL_SERVER_ERROR
+    ).body(
+      Response(null, Result(false, errorMessage))
     )
 
     // Act
