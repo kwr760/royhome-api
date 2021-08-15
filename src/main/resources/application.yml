@@ -29,7 +29,7 @@ spring:
   flyway:
     enabled: true
     encoding: UTF-8
-    baseline-on-migrate: true
+    schemas: public,resume,session
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}

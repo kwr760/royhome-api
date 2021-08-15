@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "net.roy"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+java.targetCompatibility = JavaVersion.VERSION_11
 
 plugins {
   id("org.springframework.boot") version "2.4.2"
@@ -48,8 +49,6 @@ dependencies {
 
   compileOnly("org.projectlombok:lombok")
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-
   runtimeOnly("org.postgresql:postgresql")
   annotationProcessor("org.projectlombok:lombok")
 
@@ -60,7 +59,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "1.8"
+    jvmTarget = JavaVersion.VERSION_11.toString()
   }
 }
 tasks.withType<Test> {

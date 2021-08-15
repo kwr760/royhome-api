@@ -1,4 +1,4 @@
-package net.royhome.api.model.resume
+package net.royhome.api.model.db.resume
 
 import org.hibernate.annotations.OrderBy
 import org.hibernate.annotations.Type
@@ -11,8 +11,10 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
+@Table(schema = "resume")
 @Suppress("LongParameterList")
 class Resume(
   @Id
