@@ -10,6 +10,6 @@ class LogController {
   fun log(
     @RequestBody body: Any,
   ) {
-    println(body.toString());
+    println(body.toString())
   }
 }
