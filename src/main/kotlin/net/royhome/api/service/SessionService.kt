@@ -31,7 +31,10 @@ class SessionService(
     }
     claim.darkMode?.let { session.darkMode = it }
     claim.email?.let {
-      val user = userRepository.findByEmail(claim.email) ?: User(email = claim.email, context = claim.context.toString())
+      val user = userRepository.findByEmail(claim.email) ?: User(
+        email = claim.email,
+        context = claim.context.toString()
+      )
       userRepository.save(user)
       session.user = user
     }
