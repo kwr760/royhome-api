@@ -5,7 +5,7 @@ repo=${1}
 deployment=${2}
 type=${3}
 
-source ${scripts}/${repo}/env/${type}
+source ${scripts}/${repo}/env/${type}/.env
 
 echo "installing ${repo} as ${deployment}"
 cd ${LOCATION}/${deployment}
