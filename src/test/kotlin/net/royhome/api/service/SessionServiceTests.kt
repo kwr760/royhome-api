@@ -100,6 +100,7 @@ class SessionServiceTests {
     val user = User(email = email)
     session.user = user
     every { sessionRepositoryMock.save(any()) } answers { session }
+    every { userRepositoryMock.findByEmail(any()) } answers { null }
     every { userRepositoryMock.save(any()) } answers { user }
 
     // Act

@@ -84,7 +84,8 @@ tasks.test {
 tasks.check {
   finalizedBy(
     tasks.jacocoTestReport,
-    tasks.ktlintCheck
+    tasks.ktlintCheck,
+    tasks.ktlintTestSourceSetCheck
   )
 }
 tasks.jacocoTestReport {
