@@ -13,7 +13,14 @@ prevent the secrets from being stored in the public repository.
 
 After setting the environment variables, select the active spring profile
 to run.
-
+### Debug
+Add this to 
+```text
+Modify Run Configuration...
+``` 
+```text
+ROYHOME_SSL_PASSWORD=<password>;SPRING_PROFILES_ACTIVE=dev
+```
 ### Environment Variables
 
 | Variable               | Use                            | suggested    |
