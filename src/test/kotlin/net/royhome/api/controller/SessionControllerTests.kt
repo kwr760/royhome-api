@@ -3,9 +3,9 @@ package net.royhome.api.controller
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Response
 import net.royhome.api.model.Result
-import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Session
 import net.royhome.api.service.SessionService
 import org.junit.jupiter.api.Assertions

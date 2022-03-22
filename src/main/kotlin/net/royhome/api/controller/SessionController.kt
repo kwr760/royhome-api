@@ -1,9 +1,9 @@
 package net.royhome.api.controller
 
 import net.royhome.api.constant.Constant
+import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Response
 import net.royhome.api.model.Result
-import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Session
 import net.royhome.api.service.SessionService
 import org.springframework.dao.DataAccessException

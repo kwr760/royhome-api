@@ -5,7 +5,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import net.royhome.resume.model.Resume
 import net.royhome.resume.repository.ResumeRepository
-import net.royhome.resume.service.ResumeService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
