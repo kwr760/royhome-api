@@ -1,4 +1,4 @@
-package net.royhome.api
+package net.royhome
 
 import net.royhome.api.constant.Constant
 import org.springframework.boot.autoconfigure.SpringBootApplication

@@ -98,11 +98,13 @@ tasks.jacocoTestReport {
 }
 
 val excludeList = listOf(
-  "net.royhome.api.Application*",
+  "net.royhome.Application*",
   "net.royhome.api.config.*",
   "net.royhome.api.constant.*",
   "net.royhome.api.model.*",
-  "net.royhome.api.repository.*"
+  "net.royhome.api.repository.*",
+  "net.royhome.resume.model.*",
+  "net.royhome.resume.repository.*"
 )
 tasks.jacocoTestCoverageVerification {
   violationRules {

@@ -1,4 +1,4 @@
-package net.royhome.api.model.db.resume
+package net.royhome.resume.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.Type
@@ -15,15 +15,15 @@ import javax.persistence.Table
 
 @Entity
 @Table(schema = "resume")
-class ExperienceBullet(
+class ExperienceDescription(
   @Id
   @Type(type = "pg-uuid")
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "bullet_id")
+  @Column(name = "description_id")
   val id: UUID = UUID.randomUUID(),
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "experience_id")
+  @JoinColumn(name = "experience_id", insertable = false, updatable = false)
   @JsonBackReference
   val experience: Experience,
 

@@ -1,4 +1,4 @@
-package net.royhome.api.model.db.resume
+package net.royhome.resume.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.OrderBy
@@ -19,30 +19,24 @@ import javax.persistence.Table
 
 @Entity
 @Table(schema = "resume")
-@Suppress("LongParameterList")
-class Experience(
+class SkillGroup(
   @Id
   @Type(type = "pg-uuid")
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "experience_id")
+  @Column(name = "skill_group_id")
   val id: UUID = UUID.randomUUID(),
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "resume_id")
+  @JoinColumn(name = "resume_id", nullable = true)
   @JsonBackReference
   val resume: Resume,
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "experience_id", nullable = true)
+  @JsonBackReference
+  val experience: Experience,
 
-  val title: String? = null,
-  val company: String? = null,
-  val startDate: String? = null,
-  val endDate: String? = null,
-  @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+  val name: String = "",
+  @OneToMany(mappedBy = "skillGroup", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   @OrderBy(clause = "position")
-  val description: Set<ExperienceDescription>,
-  @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  @OrderBy(clause = "position")
-  val bullets: Set<ExperienceBullet>,
-  @OneToOne(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  @OrderBy(clause = "position")
-  val tech: SkillGroup,
+  val skills: List<Skill>,
 )

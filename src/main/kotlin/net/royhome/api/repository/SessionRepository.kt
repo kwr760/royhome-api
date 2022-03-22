@@ -1,6 +1,6 @@
 package net.royhome.api.repository
 
-import net.royhome.api.model.db.session.Session
+import net.royhome.api.model.Session
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID

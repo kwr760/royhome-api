@@ -1,4 +1,4 @@
-package net.royhome.api.model.db.resume
+package net.royhome.resume.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.Type
@@ -15,17 +15,22 @@ import javax.persistence.Table
 
 @Entity
 @Table(schema = "resume")
-class Skill(
+@Suppress("LongParameterList")
+class Project(
   @Id
   @Type(type = "pg-uuid")
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "skill_id")
+  @Column(name = "project_id")
   val id: UUID = UUID.randomUUID(),
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "group_id", insertable = false, updatable = false)
+  @JoinColumn(name = "resume_id")
   @JsonBackReference
-  val skillGroup: SkillGroup,
+  val resume: Resume,
 
   val name: String = "",
+  val url: String = "",
+  val description: String = "",
+  val startDate: String? = null,
+  val endDate: String? = null,
 )
