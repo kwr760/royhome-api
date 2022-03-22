@@ -1,10 +1,10 @@
-package net.royhome.api.controller
+package net.royhome.resume.controller
 
 import net.royhome.api.constant.Constant
-import net.royhome.api.model.api.Response
-import net.royhome.api.model.api.Result
-import net.royhome.api.model.db.resume.Resume
-import net.royhome.api.service.ResumeService
+import net.royhome.api.model.Response
+import net.royhome.api.model.Result
+import net.royhome.resume.model.Resume
+import net.royhome.resume.service.ResumeService
 import org.springframework.dao.DataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

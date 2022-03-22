@@ -1,12 +1,13 @@
-package net.royhome.api.controller
+package net.royhome.resume.controller
 
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import net.royhome.api.model.api.Response
-import net.royhome.api.model.api.Result
-import net.royhome.api.model.db.resume.Resume
-import net.royhome.api.service.ResumeService
+import net.royhome.api.model.Response
+import net.royhome.api.model.Result
+import net.royhome.resume.model.Resume
+import net.royhome.resume.controller.ResumeController
+import net.royhome.resume.service.ResumeService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

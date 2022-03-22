@@ -1,4 +1,4 @@
-package net.royhome.api.model.api.session
+package net.royhome.api.model
 
 import java.util.UUID
 

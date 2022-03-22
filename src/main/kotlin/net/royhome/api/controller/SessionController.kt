@@ -1,10 +1,10 @@
 package net.royhome.api.controller
 
 import net.royhome.api.constant.Constant
-import net.royhome.api.model.api.Response
-import net.royhome.api.model.api.Result
-import net.royhome.api.model.api.session.JwtClaim
-import net.royhome.api.model.db.session.Session
+import net.royhome.api.model.Response
+import net.royhome.api.model.Result
+import net.royhome.api.model.JwtClaim
+import net.royhome.api.model.Session
 import net.royhome.api.service.SessionService
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.EmptyResultDataAccessException

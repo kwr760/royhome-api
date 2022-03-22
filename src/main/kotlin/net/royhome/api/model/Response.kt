@@ -1,4 +1,4 @@
-package net.royhome.api.model.api
+package net.royhome.api.model
 
 data class Response<Response>(
   val output: Response? = null,

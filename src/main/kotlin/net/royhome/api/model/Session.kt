@@ -1,4 +1,4 @@
-package net.royhome.api.model.db.session
+package net.royhome.api.model
 
 import org.hibernate.annotations.Type
 import java.sql.Timestamp
