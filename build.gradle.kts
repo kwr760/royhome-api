@@ -38,6 +38,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.boot:spring-boot-starter-data-rest")
   implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-websocket")
 
   implementation("org.springframework.plugin:spring-plugin-core")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -104,7 +105,10 @@ val excludeList = listOf(
   "net.royhome.api.model.*",
   "net.royhome.api.repository.*",
   "net.royhome.resume.model.*",
-  "net.royhome.resume.repository.*"
+  "net.royhome.resume.repository.*",
+  "net.royhome.tictactoe.config.*",
+  "net.royhome.tictactoe.model.*",
+  "net.royhome.tictactoe.repository.*"
 )
 tasks.jacocoTestCoverageVerification {
   violationRules {
