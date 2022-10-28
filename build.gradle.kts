@@ -12,9 +12,10 @@ plugins {
   id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
   id("io.gitlab.arturbosch.detekt") version "1.16.0"
   id("jacoco")
-  kotlin("jvm") version "1.4.21"
-  kotlin("plugin.spring") version "1.4.21"
-  kotlin("plugin.jpa") version "1.4.21"
+  kotlin("jvm") version "1.4.30"
+  kotlin("plugin.spring") version "1.4.30"
+  kotlin("plugin.jpa") version "1.4.30"
+  kotlin("plugin.serialization") version "1.4.30"
 }
 
 allOpen {
@@ -31,6 +32,7 @@ configurations {
 
 repositories {
   mavenCentral()
+  google()
   jcenter()
 }
 
@@ -38,6 +40,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.boot:spring-boot-starter-data-rest")
   implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-websocket")
 
   implementation("org.springframework.plugin:spring-plugin-core")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -46,6 +49,8 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
   implementation("io.springfox:springfox-boot-starter:3.0.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+  implementation("com.google.code.gson:gson:2.8.5")
 
   compileOnly("org.projectlombok:lombok")
 
@@ -104,7 +109,11 @@ val excludeList = listOf(
   "net.royhome.api.model.*",
   "net.royhome.api.repository.*",
   "net.royhome.resume.model.*",
-  "net.royhome.resume.repository.*"
+  "net.royhome.resume.repository.*",
+  "net.royhome.tictactoe.config.*",
+  "net.royhome.tictactoe.constant.*",
+  "net.royhome.tictactoe.model.*",
+  "net.royhome.tictactoe.repository.*"
 )
 tasks.jacocoTestCoverageVerification {
   violationRules {
