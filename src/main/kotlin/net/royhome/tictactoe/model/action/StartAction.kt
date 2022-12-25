@@ -1,4 +1,4 @@
-package net.royhome.tictactoe.model
+package net.royhome.tictactoe.model.action
 
 import java.util.UUID
 

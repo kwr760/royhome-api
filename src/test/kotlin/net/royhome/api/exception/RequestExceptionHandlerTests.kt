@@ -19,7 +19,7 @@ class RequestExceptionHandlerTests {
   @Test
   fun `requestExceptionHandler handles exceptions`() {
     // Arrange - input
-    val errorMessage: String = "Error Message"
+    val errorMessage = "Error Message"
     val exception = HttpMessageConversionException(errorMessage)
     // Arrange - response
     val expectedResponse: ResponseEntity<Any> = ResponseEntity<Any>(

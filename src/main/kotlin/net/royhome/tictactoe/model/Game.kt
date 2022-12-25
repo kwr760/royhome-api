@@ -9,6 +9,7 @@ import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.Table
+import net.royhome.tictactoe.constant.Constants
 
 @Entity
 @Table(schema = "tictactoe")
@@ -19,6 +20,8 @@ class Game(
   var gameId: UUID,
 
   var state: Int,
+
+  var board: String = Constants.InitialBoard,
 
   @OneToMany(mappedBy = "game", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   val players: MutableSet<Player>,

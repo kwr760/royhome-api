@@ -6,66 +6,88 @@ import io.mockk.verify
 import net.royhome.tictactoe.constant.Constants
 import net.royhome.tictactoe.constant.GameActionEnum
 import net.royhome.tictactoe.constant.GameStateEnum
-import net.royhome.tictactoe.constant.ResultEnum
-import net.royhome.tictactoe.model.EndAction
 import net.royhome.tictactoe.model.Game
+import net.royhome.tictactoe.model.Message
 import net.royhome.tictactoe.model.Player
-import net.royhome.tictactoe.model.Response
-import net.royhome.tictactoe.model.Result
-import net.royhome.tictactoe.model.StartAction
-import net.royhome.tictactoe.model.TurnAction
+import net.royhome.tictactoe.model.action.EndAction
+import net.royhome.tictactoe.model.action.PlayAction
+import net.royhome.tictactoe.model.action.StartAction
 import net.royhome.tictactoe.service.GameService
 import net.royhome.tictactoe.service.MessagingService
-import net.royhome.tool.service.ToolkitService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
+import net.royhome.tictactoe.constant.PieceEnum
+import org.junit.jupiter.api.assertThrows
 
 class GameControllerTests {
   private lateinit var underTest: GameController
   private lateinit var gameServiceMock: GameService
   private lateinit var messagingServiceMock: MessagingService
-  private lateinit var toolkitMock: ToolkitService
 
   @BeforeEach
   fun setUpBeforeEach() {
     gameServiceMock = mockk(relaxed = true)
     messagingServiceMock = mockk(relaxed = true)
-    toolkitMock = mockk(relaxed = true)
-    underTest = GameController(gameServiceMock, messagingServiceMock, toolkitMock)
+    underTest = GameController(gameServiceMock, messagingServiceMock)
   }
 
   @Test
-  fun `gameController joins a game - first`() {
+  fun `gameController start a game - exception`() {
     // Arrange
+    val gameId = UUID.randomUUID()
+    val playerName = "Player Name"
+    val action = StartAction(UUID.randomUUID(), playerName)
+    val game = Game(
+      gameId,
+      GameStateEnum.Open.value,
+      Constants.InitialBoard,
+      mutableSetOf()
+    )
+
+    every { gameServiceMock.joinGame(any(), any()) } returns game
+
+    // Act // Assert
+    assertThrows<RuntimeException> {
+      underTest.startGame(action)
+    }
+  }
+
+  @Test
+  fun `gameController start a game - wrong pieces`() {
+    // Arrange
+    val gameId = UUID.randomUUID()
     val playerSessionId = UUID.randomUUID()
     val playerName = "Player Name"
     val opponentSessionId = UUID.randomUUID()
     val action = StartAction(playerSessionId, playerName)
+    val game = Game(
+      gameId,
+      GameStateEnum.Open.value,
+      Constants.InitialBoard,
+      mutableSetOf()
+    )
     val player = Player(
       playerSessionId,
       name = playerName,
-      game = mockk()
+      piece = "A",
+      game = game
     )
     val opponent = Player(
       opponentSessionId,
       name = "opponent",
-      game = mockk()
+      piece = "B",
+      game = game
     )
-    val result = Result(
-      ResultEnum.SUCCESS,
-      player,
-      opponent
-    )
-    every { gameServiceMock.joinGame(any(), any()) } returns result
-    every { toolkitMock.getRandomBool() } returns true
-    val expectedResponse = Response(ResultEnum.SUCCESS)
-    val expectedStartPlayer = Response(
-      ResultEnum.SUCCESS,
+    game.players.add(player)
+    game.players.add(opponent)
+
+    every { gameServiceMock.joinGame(any(), any()) } returns game
+    val expectedResponse = Message(GameActionEnum.TakeTurn, game)
+    val expectedStartOpponent = Message(
       GameActionEnum.TakeTurn,
-      player,
-      Constants.InitialBoard
+      game
     )
 
     // Act
@@ -74,45 +96,49 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.joinGame(playerSessionId, playerName) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
-    verify(exactly = 1) {
+    verify(exactly = 0) { messagingServiceMock.send(playerSessionId, expectedResponse) }
+    verify(exactly = 0) {
       messagingServiceMock.send(
-        opponentSessionId,
-        expectedStartPlayer
+        playerSessionId,
+        expectedStartOpponent
       )
     }
   }
 
   @Test
-  fun `gameController joins a game - second`() {
+  fun `gameController start a game - ready`() {
     // Arrange
+    val gameId = UUID.randomUUID()
     val playerSessionId = UUID.randomUUID()
     val playerName = "Player Name"
     val opponentSessionId = UUID.randomUUID()
     val action = StartAction(playerSessionId, playerName)
+    val game = Game(
+      gameId,
+      GameStateEnum.Open.value,
+      Constants.InitialBoard,
+      mutableSetOf()
+    )
     val player = Player(
       playerSessionId,
       name = playerName,
-      game = mockk()
+      piece = PieceEnum.X.name,
+      game = game
     )
     val opponent = Player(
       opponentSessionId,
       name = "opponent",
-      game = mockk()
+      piece = PieceEnum.O.name,
+      game = game
     )
-    val result = Result(
-      ResultEnum.SUCCESS,
-      player,
-      opponent
-    )
-    every { gameServiceMock.joinGame(any(), any()) } returns result
-    every { toolkitMock.getRandomBool() } returns false
-    val expectedResponse = Response(ResultEnum.SUCCESS)
-    val expectedStartOpponent = Response(
-      ResultEnum.SUCCESS,
+    game.players.add(player)
+    game.players.add(opponent)
+
+    every { gameServiceMock.joinGame(any(), any()) } returns game
+    val expectedResponse = Message(GameActionEnum.TakeTurn, game)
+    val expectedStartOpponent = Message(
       GameActionEnum.TakeTurn,
-      opponent,
-      Constants.InitialBoard
+      game
     )
 
     // Act
@@ -131,22 +157,26 @@ class GameControllerTests {
   }
 
   @Test
-  fun `gameController joins a game - no opponent`() {
+  fun `gameController start a game - wait`() {
     // Arrange
+    val gameId = UUID.randomUUID()
     val playerSessionId = UUID.randomUUID()
     val playerName = "Player Name"
     val action = StartAction(playerSessionId, playerName)
     val player = Player(
       playerSessionId,
       name = playerName,
+      piece = PieceEnum.X.name,
       game = mockk()
     )
-    val result = Result(
-      ResultEnum.SUCCESS,
-      player,
+    val game = Game(
+      gameId,
+      GameStateEnum.Open.value,
+      Constants.InitialBoard,
+      mutableSetOf(player)
     )
-    every { gameServiceMock.joinGame(any(), any()) } returns result
-    val expectedResponse = Response(ResultEnum.SUCCESS)
+    every { gameServiceMock.joinGame(any(), any()) } returns game
+    val expectedResponse = Message(GameActionEnum.Wait)
 
     // Act
     val response = underTest.startGame(action)
@@ -160,30 +190,34 @@ class GameControllerTests {
   @Test
   fun `gameController ends a game`() {
     // Arrange
+    val gameId = UUID.randomUUID()
     val playerSessionId = UUID.randomUUID()
-    val action = EndAction(playerSessionId)
+    val action = EndAction(playerSessionId, "Win")
     val opponentSessionId = UUID.randomUUID()
     val player = Player(
       playerSessionId,
       name = "player",
+      piece = PieceEnum.X.name,
       game = mockk()
     )
     val opponent = Player(
       opponentSessionId,
       name = "opponent",
+      piece = PieceEnum.X.name,
       game = mockk()
     )
-    val result = Result(
-      ResultEnum.SUCCESS,
-      player,
-      opponent
+    val game = Game(
+      gameId,
+      GameStateEnum.Open.value,
+      Constants.InitialBoard,
+      mutableSetOf(player, opponent)
     )
-    every { gameServiceMock.endGame(any()) } returns result
-    val expectedResponse = Response(ResultEnum.SUCCESS)
-    val expectedEnd = Response(
-      ResultEnum.SUCCESS,
-      GameActionEnum.Closed,
+    val expectedMessage = Message(
+      GameActionEnum.EndGame,
+      game,
+      action.reason
     )
+    every { gameServiceMock.endGame(any()) } returns game
 
     // Act
     val response = underTest.endGame(action)
@@ -191,8 +225,8 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.endGame(playerSessionId) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
-    verify(exactly = 1) { messagingServiceMock.send(opponentSessionId, expectedEnd) }
+    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedMessage) }
+    verify(exactly = 1) { messagingServiceMock.send(opponentSessionId, expectedMessage) }
   }
 
   @Test
@@ -203,29 +237,29 @@ class GameControllerTests {
     val playerName = "Player Name"
     val board = Constants.InitialBoard
     val opponentSessionId = UUID.randomUUID()
-    val action = TurnAction(playerSessionId, board)
+    val action = PlayAction(playerSessionId, board)
     val player = Player(
       playerSessionId,
       name = playerName,
+      piece = PieceEnum.X.name,
       game = mockk()
     )
     val opponent = Player(
       opponentSessionId,
       name = "opponent",
+      piece = PieceEnum.X.name,
       game = mockk()
     )
     val game = Game(
       gameId,
       GameStateEnum.Closed.value,
+      Constants.InitialBoard,
       players = mutableSetOf(player, opponent)
     )
-    every { gameServiceMock.getGame(any()) } returns game
-    val expectedResponse = Response(ResultEnum.SUCCESS)
-    val expectedTurn = Response(
-      ResultEnum.SUCCESS,
+    every { gameServiceMock.updateGame(any(), any()) } returns game
+    val expectedTurn = Message(
       GameActionEnum.TakeTurn,
-      opponent,
-      Constants.InitialBoard
+      game
     )
 
     // Act
@@ -233,8 +267,8 @@ class GameControllerTests {
 
     // Assert
     Assertions.assertEquals(Unit, response)
-    verify(exactly = 1) { gameServiceMock.getGame(playerSessionId) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
+    verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
+    verify(exactly = 0) { messagingServiceMock.send(playerSessionId, expectedTurn) }
     verify(exactly = 1) { messagingServiceMock.send(opponentSessionId, expectedTurn) }
   }
 
@@ -245,10 +279,11 @@ class GameControllerTests {
     val playerSessionId = UUID.randomUUID()
     val playerName = "Player Name"
     val board = Constants.InitialBoard
-    val action = TurnAction(playerSessionId, board)
+    val action = PlayAction(playerSessionId, board)
     val player = Player(
       playerSessionId,
       name = playerName,
+      piece = PieceEnum.X.name,
       game = mockk()
     )
     val game = Game(
@@ -256,16 +291,15 @@ class GameControllerTests {
       GameStateEnum.Closed.value,
       players = mutableSetOf(player)
     )
-    every { gameServiceMock.getGame(any()) } returns game
-    val expectedResponse = Response(ResultEnum.FAILURE)
+    every { gameServiceMock.updateGame(any(), any()) } returns game
 
     // Act
     val response = underTest.takeTurn(action)
 
     // Assert
     Assertions.assertEquals(Unit, response)
-    verify(exactly = 1) { gameServiceMock.getGame(playerSessionId) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
+    verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
+    verify(exactly = 0) { messagingServiceMock.send(any(), any()) }
   }
 
   @Test
@@ -273,16 +307,16 @@ class GameControllerTests {
     // Arrange
     val playerSessionId = UUID.randomUUID()
     val board = Constants.InitialBoard
-    val action = TurnAction(playerSessionId, board)
-    every { gameServiceMock.getGame(any()) } returns null
-    val expectedResponse = Response(ResultEnum.FAILURE)
+    val action = PlayAction(playerSessionId, board)
+    val exception = RuntimeException("Did not find game for session-id: $playerSessionId")
+    every { gameServiceMock.updateGame(any(), any()) } throws exception
 
     // Act
-    val response = underTest.takeTurn(action)
+    assertThrows<RuntimeException> {
+      underTest.takeTurn(action)
+    }
 
     // Assert
-    Assertions.assertEquals(Unit, response)
-    verify(exactly = 1) { gameServiceMock.getGame(playerSessionId) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
+    verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
   }
 }

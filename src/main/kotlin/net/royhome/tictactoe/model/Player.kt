@@ -17,9 +17,11 @@ class Player(
   @Id
   @Type(type = "pg-uuid")
   @Column(name = "session_id")
-  var sessionId: UUID,
+  val sessionId: UUID,
 
-  var name: String,
+  val name: String,
+
+  val piece: String,
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "game_id")

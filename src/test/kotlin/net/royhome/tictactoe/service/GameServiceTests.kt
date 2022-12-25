@@ -4,27 +4,31 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import net.royhome.tictactoe.constant.GameStateEnum
-import net.royhome.tictactoe.constant.ResultEnum
 import net.royhome.tictactoe.model.Game
 import net.royhome.tictactoe.model.Player
-import net.royhome.tictactoe.model.Result
 import net.royhome.tictactoe.repository.GameRepository
 import net.royhome.tictactoe.repository.PlayerRepository
+import net.royhome.tool.service.ToolkitService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
+import net.royhome.tictactoe.constant.Constants
+import net.royhome.tictactoe.constant.PieceEnum
+import org.junit.jupiter.api.assertThrows
 
 class GameServiceTests {
   private lateinit var gameRepositoryMock: GameRepository
   private lateinit var playerRepositoryMock: PlayerRepository
+  private lateinit var toolkitServiceMock: ToolkitService
   private lateinit var underTest: GameService
 
   @BeforeEach
   fun setUpBeforeEach() {
     gameRepositoryMock = mockk(relaxed = true)
     playerRepositoryMock = mockk(relaxed = true)
-    underTest = GameService(gameRepositoryMock, playerRepositoryMock)
+    toolkitServiceMock = mockk(relaxed = true)
+    underTest = GameService(gameRepositoryMock, playerRepositoryMock, toolkitServiceMock)
   }
 
   @Test
@@ -34,10 +38,9 @@ class GameServiceTests {
     val gameId: UUID = UUID.randomUUID()
     val name = "PLayer Name"
     val players = mutableSetOf<Player>()
-    val expectedGame = Game(gameId, GameStateEnum.Open.value, players)
-    val player = Player(sessionId, name, expectedGame)
+    val expectedGame = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(sessionId, name, PieceEnum.X.name, expectedGame)
     every { playerRepositoryMock.findBySessionId(any()) } returns player
-    every { gameRepositoryMock.findByGameId(any()) } returns expectedGame
 
     // Act
     val response = underTest.getGame(sessionId)
@@ -45,7 +48,6 @@ class GameServiceTests {
     // Assert
     Assertions.assertEquals(response, expectedGame)
     verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
-    verify(exactly = 1) { gameRepositoryMock.findByGameId(gameId) }
   }
 
   @Test
@@ -70,57 +72,36 @@ class GameServiceTests {
     val opponentId: UUID = UUID.randomUUID()
     val gameId: UUID = UUID.randomUUID()
     val players = mutableSetOf<Player>()
-    val game = Game(gameId, GameStateEnum.Closed.value, players)
-    val player = Player(playerId, "Player Name", game)
-    val opponent = Player(opponentId, "Opponent Name", game)
+    val game = Game(gameId, GameStateEnum.Closed.value, Constants.InitialBoard, players)
+    val player = Player(playerId, "Player Name", PieceEnum.X.name, game)
+    val opponent = Player(opponentId, "Opponent Name", PieceEnum.O.name, game)
     game.players.addAll(listOf(player, opponent))
-    val expectedResult = Result(ResultEnum.SUCCESS, player = player, opponent = opponent)
+    val expectedResult = Game(gameId, GameStateEnum.Closed.value, Constants.InitialBoard, mutableSetOf(player, opponent))
     every { playerRepositoryMock.findBySessionId(any()) } returns player
     every { gameRepositoryMock.findByGameId(any()) } returns game
+    every { gameRepositoryMock.deleteByGameId(any()) } returns Unit
 
     // Act
     val response = underTest.endGame(playerId)
 
     // Assert
-    Assertions.assertEquals(expectedResult, response)
+    Assertions.assertEquals(expectedResult.toString(), response.toString())
     verify(exactly = 1) { playerRepositoryMock.findBySessionId(playerId) }
-    verify(exactly = 1) { gameRepositoryMock.findByGameId(gameId) }
-  }
-
-  @Test
-  fun `end a game - opponent`() {
-    // Arrange
-    val sessionId: UUID = UUID.randomUUID()
-    val gameId: UUID = UUID.randomUUID()
-    val name = "PLayer Name"
-    val players = mutableSetOf<Player>()
-    val game = Game(gameId, GameStateEnum.Closed.value, players)
-    val player = Player(sessionId, name, game)
-    val expectedResult = Result(ResultEnum.SUCCESS, player = player)
-    every { playerRepositoryMock.findBySessionId(any()) } returns player
-    every { gameRepositoryMock.findByGameId(any()) } returns game
-
-    // Act
-    val response = underTest.endGame(sessionId)
-
-    // Assert
-    Assertions.assertEquals(expectedResult, response)
-    verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
-    verify(exactly = 1) { gameRepositoryMock.findByGameId(gameId) }
+    verify(exactly = 1) { gameRepositoryMock.deleteByGameId(gameId) }
   }
 
   @Test
   fun `end a game - no player`() {
     // Arrange
     val sessionId: UUID = UUID.randomUUID()
-    val expectedResult = Result(ResultEnum.FAILURE)
     every { playerRepositoryMock.findBySessionId(any()) } returns null
 
     // Act
-    val response = underTest.endGame(sessionId)
+    assertThrows<RuntimeException> {
+      underTest.endGame(sessionId)
+    }
 
     // Assert
-    Assertions.assertEquals(expectedResult, response)
     verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
     verify(exactly = 0) { gameRepositoryMock.findByGameId(any()) }
   }
@@ -133,11 +114,11 @@ class GameServiceTests {
     val gameId: UUID = UUID.randomUUID()
     val name = "PLayer Name"
     val players = mutableSetOf<Player>()
-    val game = Game(gameId, GameStateEnum.Open.value, players)
-    val player = Player(sessionId, name, game)
-    val opponent = Player(opponentId, "Opponent Name", game)
-    game.players.addAll(listOf(opponent, player))
-    val expectedResult = Result(ResultEnum.SUCCESS, opponent = opponent, player = player)
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(sessionId, name, PieceEnum.X.name, game)
+    val opponent = Player(opponentId, "Opponent Name", PieceEnum.O.name, game)
+    game.players.addAll(listOf(opponent))
+    val expectedResult = Game(gameId, GameStateEnum.Closed.value, Constants.InitialBoard, mutableSetOf(opponent, player))
     every { playerRepositoryMock.findBySessionId(any()) } returns player
     every { gameRepositoryMock.findByGameId(any()) } returns game
     every { gameRepositoryMock.findByEarliestState(any()) } returns game
@@ -149,7 +130,6 @@ class GameServiceTests {
     // Assert
     Assertions.assertEquals(expectedResult.toString(), response.toString())
     verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
-    verify(exactly = 1) { gameRepositoryMock.findByGameId(gameId) }
     verify(exactly = 1) { gameRepositoryMock.save(game) }
   }
 
@@ -161,11 +141,11 @@ class GameServiceTests {
     val gameId: UUID = UUID.randomUUID()
     val name = "PLayer Name"
     val players = mutableSetOf<Player>()
-    val game = Game(gameId, GameStateEnum.Open.value, players)
-    val player = Player(playerId, name, game)
-    val opponent = Player(opponentId, "Opponent Name", game)
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(playerId, name, PieceEnum.X.name, game)
+    val opponent = Player(opponentId, "Opponent Name", PieceEnum.O.name, game)
     game.players.add(opponent)
-    val expectedResult = Result(ResultEnum.SUCCESS, opponent = opponent, player = player)
+    val expectedResult = Game(gameId, GameStateEnum.Closed.value, Constants.InitialBoard, mutableSetOf(opponent, player))
     every { playerRepositoryMock.findBySessionId(any()) } returns null
     every { gameRepositoryMock.findByEarliestState(any()) } returns game
     every { gameRepositoryMock.save(any()) } returns game
@@ -187,10 +167,9 @@ class GameServiceTests {
     val gameId: UUID = UUID.randomUUID()
     val name = "PLayer Name"
     val players = mutableSetOf<Player>()
-    val game = Game(gameId, GameStateEnum.Open.value, players)
-    val player = Player(playerId, name, game)
-    game.players.add(player)
-    val expectedResult = Result(ResultEnum.SUCCESS, player = player)
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(playerId, name, PieceEnum.X.name, game)
+    val expectedResult = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, mutableSetOf(player))
     every { playerRepositoryMock.findBySessionId(any()) } returns null
     every { gameRepositoryMock.findByEarliestState(any()) } returns game
     every { gameRepositoryMock.save(any()) } returns game
@@ -210,11 +189,12 @@ class GameServiceTests {
     // Arrange
     val sessionId: UUID = UUID.randomUUID()
     val gameId: UUID = UUID.randomUUID()
-    val name = "PLayer Name"
+    val name = "Player Name"
     val players = mutableSetOf<Player>()
-    val game = Game(gameId, GameStateEnum.Open.value, players)
-    val player = Player(sessionId, name, game)
-    val expectedResult = Result(ResultEnum.SUCCESS, player = player)
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(sessionId, name, PieceEnum.X.name, game)
+    players.add(player)
+    val expectedResult = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, mutableSetOf(player))
     every { playerRepositoryMock.findBySessionId(any()) } returns null
     every { gameRepositoryMock.findByEarliestState(any()) } returns null
     every { gameRepositoryMock.save(any()) } returns game
@@ -223,9 +203,57 @@ class GameServiceTests {
     val response = underTest.joinGame(sessionId, name)
 
     // Assert
-    Assertions.assertEquals(expectedResult.toString(), response.toString())
+    Assertions.assertEquals(expectedResult.state, response.state)
+    Assertions.assertEquals(expectedResult.board, response.board)
+    Assertions.assertEquals(expectedResult.players.toString(), response.players.toString())
     verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
     verify(exactly = 1) { gameRepositoryMock.findByEarliestState(GameStateEnum.Open.value) }
     verify(exactly = 1) { gameRepositoryMock.save(any()) }
+  }
+
+  @Test
+  fun `update game - game`() {
+    // Arrange
+    val sessionId: UUID = UUID.randomUUID()
+    val gameId: UUID = UUID.randomUUID()
+    val name = "Player Name"
+    val players = mutableSetOf<Player>()
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(sessionId, name, PieceEnum.X.name, game)
+    players.add(player)
+    val expectedResult = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, mutableSetOf(player))
+    every { playerRepositoryMock.findBySessionId(any()) } returns player
+    every { gameRepositoryMock.save(any()) } returns game
+
+    // Act
+    val response = underTest.updateGame(sessionId, "XO---X---")
+
+    // Assert
+    Assertions.assertEquals(expectedResult.toString(), response.toString())
+    verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
+    verify(exactly = 1) { gameRepositoryMock.save(any()) }
+  }
+
+  @Test
+  fun `update game - exception`() {
+    // Arrange
+    val sessionId: UUID = UUID.randomUUID()
+    val gameId: UUID = UUID.randomUUID()
+    val name = "Player Name"
+    val players = mutableSetOf<Player>()
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val player = Player(sessionId, name, PieceEnum.X.name, game)
+    players.add(player)
+    every { playerRepositoryMock.findBySessionId(any()) } returns null
+    every { gameRepositoryMock.save(any()) } returns game
+
+    // Act
+    assertThrows<RuntimeException> {
+      underTest.updateGame(sessionId, "XO---X---")
+    }
+
+    // Assert
+    verify(exactly = 1) { playerRepositoryMock.findBySessionId(sessionId) }
+    verify(exactly = 0) { gameRepositoryMock.save(any()) }
   }
 }
