@@ -1,6 +1,5 @@
 package net.royhome.tictactoe.model
 
-import org.hibernate.annotations.Type
 import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -10,6 +9,7 @@ import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.Table
 import net.royhome.tictactoe.constant.Constants
+import org.hibernate.annotations.Type
 
 @Entity
 @Table(schema = "tictactoe")

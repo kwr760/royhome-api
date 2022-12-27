@@ -1,5 +1,6 @@
 package net.royhome.api.controller
 
+import java.util.UUID
 import net.royhome.api.constant.Constant
 import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Response
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
 
 @RestController
 class SessionController(

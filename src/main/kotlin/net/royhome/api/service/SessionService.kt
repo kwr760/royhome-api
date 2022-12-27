@@ -1,13 +1,13 @@
 package net.royhome.api.service
 
+import java.sql.Timestamp
+import java.util.UUID
 import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Session
 import net.royhome.api.model.User
 import net.royhome.api.repository.SessionRepository
 import net.royhome.api.repository.UserRepository
 import org.springframework.stereotype.Service
-import java.sql.Timestamp
-import java.util.UUID
 
 @Service
 class SessionService(
