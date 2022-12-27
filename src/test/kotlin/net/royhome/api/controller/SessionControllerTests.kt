@@ -3,6 +3,7 @@ package net.royhome.api.controller
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.util.UUID
 import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Response
 import net.royhome.api.model.Result
@@ -16,7 +17,6 @@ import org.springframework.dao.DataRetrievalFailureException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.util.UUID
 
 class SessionControllerTests {
   private lateinit var underTest: SessionController
