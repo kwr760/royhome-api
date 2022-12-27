@@ -63,20 +63,22 @@ class GameController(
   @MessageMapping("/end")
   fun endGame(action: EndAction) {
     val game = gameService.endGame(action.sessionId)
-    game.players.forEach {
-      val message = Message(
-        GameActionEnum.EndGame,
-        game,
-        action.reason
-      )
-      msgService.send(it.sessionId, message)
+    game?.let {
+      game.players.forEach {
+        val message = Message(
+          GameActionEnum.EndGame,
+          game,
+          action.reason
+        )
+        msgService.send(it.sessionId, message)
+      }
     }
   }
 
   @MessageMapping("/turn")
   fun takeTurn(action: PlayAction) {
     val game = gameService.updateGame(action.sessionId, action.board)
-    game.let {
+    game?.let {
       val opponent = game.players.find { it.sessionId != action.sessionId }
       opponent?.let {
         msgService.send(

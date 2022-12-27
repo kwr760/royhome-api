@@ -3,9 +3,11 @@ package net.royhome.tictactoe.controller
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.util.UUID
 import net.royhome.tictactoe.constant.Constants
 import net.royhome.tictactoe.constant.GameActionEnum
 import net.royhome.tictactoe.constant.GameStateEnum
+import net.royhome.tictactoe.constant.PieceEnum
 import net.royhome.tictactoe.model.Game
 import net.royhome.tictactoe.model.Message
 import net.royhome.tictactoe.model.Player
@@ -17,8 +19,6 @@ import net.royhome.tictactoe.service.MessagingService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.UUID
-import net.royhome.tictactoe.constant.PieceEnum
 import org.junit.jupiter.api.assertThrows
 
 class GameControllerTests {
@@ -308,15 +308,28 @@ class GameControllerTests {
     val playerSessionId = UUID.randomUUID()
     val board = Constants.InitialBoard
     val action = PlayAction(playerSessionId, board)
-    val exception = RuntimeException("Did not find game for session-id: $playerSessionId")
-    every { gameServiceMock.updateGame(any(), any()) } throws exception
+    every { gameServiceMock.updateGame(any(), any()) } returns null
 
     // Act
-    assertThrows<RuntimeException> {
-      underTest.takeTurn(action)
-    }
+    underTest.takeTurn(action)
 
     // Assert
     verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
+    verify(exactly = 0) { messagingServiceMock.send(any(), any()) }
+  }
+
+  @Test
+  fun `gameController ends a game but game does not exist`() {
+    // Arrange
+    val playerSessionId = UUID.randomUUID()
+    val action = EndAction(playerSessionId, "win")
+    every { gameServiceMock.endGame(any()) } returns null
+
+    // Act
+    underTest.endGame(action)
+
+    // Assert
+    verify(exactly = 1) { gameServiceMock.endGame(playerSessionId) }
+    verify(exactly = 0) { messagingServiceMock.send(any(), any()) }
   }
 }
