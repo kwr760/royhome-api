@@ -3,14 +3,14 @@ package net.royhome.tictactoe.service
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import net.royhome.tictactoe.constant.ResultEnum
+import java.util.UUID
+import net.royhome.tictactoe.constant.GameActionEnum
 import net.royhome.tictactoe.model.Game
-import net.royhome.tictactoe.model.Response
+import net.royhome.tictactoe.model.Message
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import java.util.UUID
 
 class MessagingServiceTests {
   private lateinit var underTest: MessagingService
@@ -26,9 +26,9 @@ class MessagingServiceTests {
   fun `messagingService sends a message`() {
     // Arrange
     val sessionId: UUID = UUID.randomUUID()
-    every { template.convertAndSend(any<String>(), any<Game>()) } returns Unit
+    every { template.convertAndSend(any(), any<Game>()) } returns Unit
     val dest = "/session/$sessionId"
-    val serviceResponse = Response(ResultEnum.SUCCESS)
+    val serviceResponse = Message(GameActionEnum.TakeTurn)
 
     // Act
     val response = underTest.send(sessionId, serviceResponse)

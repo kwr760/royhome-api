@@ -3,6 +3,8 @@ package net.royhome.api.service
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.sql.Timestamp
+import java.util.UUID
 import net.royhome.api.model.JwtClaim
 import net.royhome.api.model.Session
 import net.royhome.api.model.User
@@ -11,8 +13,6 @@ import net.royhome.api.repository.UserRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.sql.Timestamp
-import java.util.UUID
 
 class SessionServiceTests {
   private lateinit var underTest: SessionService

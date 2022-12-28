@@ -1,6 +1,5 @@
 package net.royhome.tictactoe.model
 
-import org.hibernate.annotations.Type
 import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -9,6 +8,8 @@ import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.Table
+import net.royhome.tictactoe.constant.Constants
+import org.hibernate.annotations.Type
 
 @Entity
 @Table(schema = "tictactoe")
@@ -19,6 +20,8 @@ class Game(
   var gameId: UUID,
 
   var state: Int,
+
+  var board: String = Constants.InitialBoard,
 
   @OneToMany(mappedBy = "game", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   val players: MutableSet<Player>,

@@ -1,6 +1,5 @@
 package net.royhome.api.model
 
-import org.hibernate.annotations.Type
 import java.sql.Timestamp
 import java.util.UUID
 import javax.persistence.CascadeType
@@ -10,6 +9,7 @@ import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
+import org.hibernate.annotations.Type
 
 @Entity
 @Table(schema = "session")

@@ -1,10 +1,10 @@
 package net.royhome.tictactoe.repository
 
+import java.util.UUID
 import net.royhome.tictactoe.model.Game
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import java.util.UUID
 
 @Repository
 interface GameRepository : JpaRepository<Game, Long> {

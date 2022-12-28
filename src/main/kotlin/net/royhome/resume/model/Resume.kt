@@ -1,7 +1,5 @@
 package net.royhome.resume.model
 
-import org.hibernate.annotations.OrderBy
-import org.hibernate.annotations.Type
 import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -12,6 +10,8 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.Table
+import org.hibernate.annotations.OrderBy
+import org.hibernate.annotations.Type
 
 @Entity
 @Table(schema = "resume")

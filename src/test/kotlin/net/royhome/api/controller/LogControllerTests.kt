@@ -1,11 +1,11 @@
 package net.royhome.api.controller
 
 import io.mockk.mockk
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
 
 class LogControllerTests {
   private lateinit var stdout: PrintStream

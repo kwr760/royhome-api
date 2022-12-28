@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS tictactoe.game
 (
     game_id         uuid NOT NULL,
     state           int default 1,
+    board           varchar(9) default '---------',
     created         timestamp default now(),
     modified        timestamp default now(),
     changed         int default 1
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS tictactoe.player
     session_id      uuid NOT NULL,
     game_id         uuid NOT NULL,
     name            varchar(256) NOT NULL,
+    piece           char,
     created         timestamp default now(),
     modified        timestamp default now(),
     changed         int default 1
