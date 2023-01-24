@@ -11,7 +11,6 @@ import net.royhome.tictactoe.model.Game
 import net.royhome.tictactoe.model.Player
 import net.royhome.tictactoe.repository.GameRepository
 import net.royhome.tictactoe.repository.PlayerRepository
-import net.royhome.tool.service.ToolkitService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
