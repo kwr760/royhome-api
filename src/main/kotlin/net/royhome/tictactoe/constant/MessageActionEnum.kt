@@ -1,6 +1,7 @@
 package net.royhome.tictactoe.constant
 
-enum class GameActionEnum {
+enum class MessageActionEnum {
+  SetPlayers,
   TakeTurn,
   Wait,
   EndGame,

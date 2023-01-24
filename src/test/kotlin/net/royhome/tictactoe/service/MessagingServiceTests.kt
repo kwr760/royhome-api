@@ -4,9 +4,13 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.UUID
-import net.royhome.tictactoe.constant.GameActionEnum
+import net.royhome.tictactoe.constant.Constants
+import net.royhome.tictactoe.constant.GameStateEnum
+import net.royhome.tictactoe.constant.MessageActionEnum
+import net.royhome.tictactoe.constant.PieceEnum
 import net.royhome.tictactoe.model.Game
 import net.royhome.tictactoe.model.Message
+import net.royhome.tictactoe.model.Player
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,13 +32,39 @@ class MessagingServiceTests {
     val sessionId: UUID = UUID.randomUUID()
     every { template.convertAndSend(any(), any<Game>()) } returns Unit
     val dest = "/session/$sessionId"
-    val serviceResponse = Message(GameActionEnum.TakeTurn)
+    val serviceResponse = Message(MessageActionEnum.TakeTurn)
 
     // Act
-    val response = underTest.send(sessionId, serviceResponse)
+    val response = underTest.send(serviceResponse, sessionId)
 
     // Assert
     Assertions.assertEquals(response, Unit)
     verify(exactly = 1) { template.convertAndSend(dest, serviceResponse) }
+  }
+
+  @Test
+  fun `messagingService sends a message to both players`() {
+    // Arrange
+    val oneSessionId: UUID = UUID.randomUUID()
+    val twoSessionId: UUID = UUID.randomUUID()
+    val gameId: UUID = UUID.randomUUID()
+    every { template.convertAndSend(any(), any<Game>()) } returns Unit
+    val oneDest = "/session/$oneSessionId"
+    val twoDest = "/session/$twoSessionId"
+    val serviceResponse = Message(MessageActionEnum.TakeTurn)
+    val players = mutableSetOf<Player>()
+    val game = Game(gameId, GameStateEnum.Open.value, Constants.InitialBoard, players)
+    val one = Player(oneSessionId, "Player #1", PieceEnum.X.name, game)
+    val two = Player(twoSessionId, "Player #2", PieceEnum.O.name, game)
+    players.add(one)
+    players.add(two)
+
+    // Act
+    val response = underTest.send(serviceResponse, players.toList())
+
+    // Assert
+    Assertions.assertEquals(response, Unit)
+    verify(exactly = 1) { template.convertAndSend(oneDest, serviceResponse) }
+    verify(exactly = 1) { template.convertAndSend(twoDest, serviceResponse) }
   }
 }

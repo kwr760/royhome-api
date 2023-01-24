@@ -5,8 +5,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.util.UUID
 import net.royhome.tictactoe.constant.Constants
-import net.royhome.tictactoe.constant.GameActionEnum
 import net.royhome.tictactoe.constant.GameStateEnum
+import net.royhome.tictactoe.constant.MessageActionEnum
 import net.royhome.tictactoe.constant.PieceEnum
 import net.royhome.tictactoe.model.Game
 import net.royhome.tictactoe.model.Message
@@ -16,6 +16,7 @@ import net.royhome.tictactoe.model.action.PlayAction
 import net.royhome.tictactoe.model.action.StartAction
 import net.royhome.tictactoe.service.GameService
 import net.royhome.tictactoe.service.MessagingService
+import net.royhome.tictactoe.service.ToolkitService
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,12 +26,13 @@ class GameControllerTests {
   private lateinit var underTest: GameController
   private lateinit var gameServiceMock: GameService
   private lateinit var messagingServiceMock: MessagingService
-
+  private lateinit var toolkitMock: ToolkitService
   @BeforeEach
   fun setUpBeforeEach() {
     gameServiceMock = mockk(relaxed = true)
     messagingServiceMock = mockk(relaxed = true)
-    underTest = GameController(gameServiceMock, messagingServiceMock)
+    toolkitMock = mockk(relaxed = true)
+    underTest = GameController(gameServiceMock, messagingServiceMock, toolkitMock)
   }
 
   @Test
@@ -84,9 +86,9 @@ class GameControllerTests {
     game.players.add(opponent)
 
     every { gameServiceMock.joinGame(any(), any()) } returns game
-    val expectedResponse = Message(GameActionEnum.TakeTurn, game)
+    val expectedResponse = Message(MessageActionEnum.TakeTurn, game)
     val expectedStartOpponent = Message(
-      GameActionEnum.TakeTurn,
+      MessageActionEnum.TakeTurn,
       game
     )
 
@@ -96,11 +98,11 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.joinGame(playerSessionId, playerName) }
-    verify(exactly = 0) { messagingServiceMock.send(playerSessionId, expectedResponse) }
+    verify(exactly = 0) { messagingServiceMock.send(expectedResponse, playerSessionId) }
     verify(exactly = 0) {
       messagingServiceMock.send(
-        playerSessionId,
-        expectedStartOpponent
+        expectedStartOpponent,
+        playerSessionId
       )
     }
   }
@@ -134,12 +136,8 @@ class GameControllerTests {
     game.players.add(player)
     game.players.add(opponent)
 
+    every { toolkitMock.getNextPlayer(any()) } returns PieceEnum.X
     every { gameServiceMock.joinGame(any(), any()) } returns game
-    val expectedResponse = Message(GameActionEnum.TakeTurn, game)
-    val expectedStartOpponent = Message(
-      GameActionEnum.TakeTurn,
-      game
-    )
 
     // Act
     val response = underTest.startGame(action)
@@ -147,11 +145,22 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.joinGame(playerSessionId, playerName) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
     verify(exactly = 1) {
       messagingServiceMock.send(
-        playerSessionId,
-        expectedStartOpponent
+        Message(
+          MessageActionEnum.SetPlayers,
+          game
+        ),
+        game.players.toList(),
+      )
+    }
+    verify(exactly = 1) {
+      messagingServiceMock.send(
+        Message(
+          MessageActionEnum.TakeTurn,
+          game
+        ),
+        listOf(player)
       )
     }
   }
@@ -176,7 +185,6 @@ class GameControllerTests {
       mutableSetOf(player)
     )
     every { gameServiceMock.joinGame(any(), any()) } returns game
-    val expectedResponse = Message(GameActionEnum.Wait)
 
     // Act
     val response = underTest.startGame(action)
@@ -184,7 +192,7 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.joinGame(playerSessionId, playerName) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedResponse) }
+    verify(exactly = 0) { messagingServiceMock.send(any(), any<List<Player>>()) }
   }
 
   @Test
@@ -213,7 +221,7 @@ class GameControllerTests {
       mutableSetOf(player, opponent)
     )
     val expectedMessage = Message(
-      GameActionEnum.EndGame,
+      MessageActionEnum.EndGame,
       game,
       action.reason
     )
@@ -225,8 +233,7 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.endGame(playerSessionId) }
-    verify(exactly = 1) { messagingServiceMock.send(playerSessionId, expectedMessage) }
-    verify(exactly = 1) { messagingServiceMock.send(opponentSessionId, expectedMessage) }
+    verify(exactly = 1) { messagingServiceMock.send(expectedMessage, game.players.toList()) }
   }
 
   @Test
@@ -258,7 +265,7 @@ class GameControllerTests {
     )
     every { gameServiceMock.updateGame(any(), any()) } returns game
     val expectedTurn = Message(
-      GameActionEnum.TakeTurn,
+      MessageActionEnum.TakeTurn,
       game
     )
 
@@ -268,8 +275,7 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
-    verify(exactly = 0) { messagingServiceMock.send(playerSessionId, expectedTurn) }
-    verify(exactly = 1) { messagingServiceMock.send(opponentSessionId, expectedTurn) }
+    verify(exactly = 1) { messagingServiceMock.send(expectedTurn, any<List<Player>>()) }
   }
 
   @Test
@@ -299,7 +305,7 @@ class GameControllerTests {
     // Assert
     Assertions.assertEquals(Unit, response)
     verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
-    verify(exactly = 0) { messagingServiceMock.send(any(), any()) }
+    verify(exactly = 1) { messagingServiceMock.send(any(), listOf()) }
   }
 
   @Test
@@ -315,7 +321,7 @@ class GameControllerTests {
 
     // Assert
     verify(exactly = 1) { gameServiceMock.updateGame(playerSessionId, board) }
-    verify(exactly = 0) { messagingServiceMock.send(any(), any()) }
+    verify(exactly = 1) { messagingServiceMock.send(any(), listOf()) }
   }
 
   @Test
@@ -330,6 +336,15 @@ class GameControllerTests {
 
     // Assert
     verify(exactly = 1) { gameServiceMock.endGame(playerSessionId) }
-    verify(exactly = 0) { messagingServiceMock.send(any(), any()) }
+    verify(exactly = 1) {
+      messagingServiceMock.send(
+        Message(
+          MessageActionEnum.EndGame,
+          null,
+          "win"
+        ),
+        any<List<Player>>()
+      )
+    }
   }
 }

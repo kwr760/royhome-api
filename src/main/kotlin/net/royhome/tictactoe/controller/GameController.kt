@@ -1,13 +1,13 @@
 package net.royhome.tictactoe.controller
 
-import net.royhome.tictactoe.constant.GameActionEnum
-import net.royhome.tictactoe.constant.PieceEnum
+import net.royhome.tictactoe.constant.MessageActionEnum
 import net.royhome.tictactoe.model.Message
 import net.royhome.tictactoe.model.action.EndAction
 import net.royhome.tictactoe.model.action.PlayAction
 import net.royhome.tictactoe.model.action.StartAction
 import net.royhome.tictactoe.service.GameService
 import net.royhome.tictactoe.service.MessagingService
+import net.royhome.tictactoe.service.ToolkitService
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.stereotype.Controller
 
@@ -15,43 +15,31 @@ import org.springframework.stereotype.Controller
 class GameController(
   val gameService: GameService,
   val msgService: MessagingService,
+  val toolkit: ToolkitService,
 ) {
   @MessageMapping("/start")
   fun startGame(action: StartAction) {
     val game = gameService.joinGame(action.sessionId, action.name)
+    val nextPlayer = toolkit.getNextPlayer(game.board)
 
     when (game.players.count()) {
-      1 -> {
-        msgService.send(
-          action.sessionId,
-          Message(
-            GameActionEnum.Wait,
-          )
-        )
-      }
+      1 -> { return }
 
       2 -> {
-        val players = game.players
-        val first = players.find { it.piece == PieceEnum.X.name }
-        val opponent = players.find { it.piece == PieceEnum.O.name }
-        first?.let {
-          msgService.send(
-            it.sessionId,
-            Message(
-              action = GameActionEnum.TakeTurn,
-              game
-            )
-          )
-        }
-        opponent?.let {
-          msgService.send(
-            it.sessionId,
-            Message(
-              action = GameActionEnum.Wait,
-              game
-            )
-          )
-        }
+        msgService.send(
+          Message(
+            action = MessageActionEnum.SetPlayers,
+            game
+          ),
+          game.players.toList()
+        )
+        msgService.send(
+          Message(
+            action = MessageActionEnum.TakeTurn,
+            game
+          ),
+          game.players.filter { it.piece == nextPlayer.name }
+        )
       }
 
       else -> {
@@ -63,32 +51,28 @@ class GameController(
   @MessageMapping("/end")
   fun endGame(action: EndAction) {
     val game = gameService.endGame(action.sessionId)
-    game?.let {
-      game.players.forEach {
-        val message = Message(
-          GameActionEnum.EndGame,
-          game,
-          action.reason
-        )
-        msgService.send(it.sessionId, message)
-      }
-    }
+    val players = if (game !== null) game.players else mutableSetOf()
+
+    msgService.send(
+      Message(
+        action = MessageActionEnum.EndGame,
+        game,
+        action.reason
+      ),
+      players.toList()
+    )
   }
 
   @MessageMapping("/turn")
   fun takeTurn(action: PlayAction) {
     val game = gameService.updateGame(action.sessionId, action.board)
-    game?.let {
-      val opponent = game.players.find { it.sessionId != action.sessionId }
-      opponent?.let {
-        msgService.send(
-          opponent.sessionId,
-          Message(
-            action = GameActionEnum.TakeTurn,
-            game
-          )
-        )
-      }
-    }
+    val players = if (game !== null) game.players else mutableSetOf()
+    msgService.send(
+      Message(
+        action = MessageActionEnum.TakeTurn,
+        game
+      ),
+      players.filter { it.sessionId != action.sessionId },
+    )
   }
 }

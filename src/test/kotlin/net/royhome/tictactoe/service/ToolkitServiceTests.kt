@@ -1,4 +1,4 @@
-package net.royhome.tool.service
+package net.royhome.tictactoe.service
 
 import net.royhome.tictactoe.constant.PieceEnum
 import org.junit.jupiter.api.Assertions
@@ -47,5 +47,23 @@ class ToolkitServiceTests {
 
     // Assert
     Assertions.assertTrue(listOf(PieceEnum.X, PieceEnum.O).contains(piece))
+  }
+
+  @Test
+  fun `getNextPlayer - X`() {
+    // Arrange // Act
+    val piece = underTest.getNextPlayer("XO-------")
+
+    // Assert
+    Assertions.assertEquals(PieceEnum.X, piece)
+  }
+
+  @Test
+  fun `getNextPlayer - O`() {
+    // Arrange // Act
+    val piece = underTest.getNextPlayer("X--------")
+
+    // Assert
+    Assertions.assertEquals(PieceEnum.O, piece)
   }
 }
