@@ -28,5 +28,5 @@ jobs:
           HOST: ${{ vars.SSH_HOST }}
           KEY: ${{ secrets.SSH_KEY }}
 
-      - name: Stop the server
+      - name: deploy to server
         run: ssh staging '/usr/royhome/scripts/deploy/deploy-release.sh api'
