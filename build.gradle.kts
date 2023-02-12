@@ -9,7 +9,7 @@ plugins {
   id("org.springframework.boot") version "2.4.2"
   id("org.flywaydb.flyway") version "7.5.4"
   id("io.spring.dependency-management") version "1.0.11.RELEASE"
-  id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+  id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
   id("io.gitlab.arturbosch.detekt") version "1.16.0"
   id("jacoco")
   kotlin("jvm") version "1.4.30"
@@ -50,7 +50,7 @@ dependencies {
 
   implementation("io.springfox:springfox-boot-starter:3.0.0")
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
-  implementation("com.google.code.gson:gson:2.8.5")
+  implementation("com.google.code.gson:gson:2.10.1")
 
   compileOnly("org.projectlombok:lombok")
 
