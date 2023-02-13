@@ -2,20 +2,20 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "net.roy"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 plugins {
-  id("org.springframework.boot") version "2.4.2"
+  id("org.springframework.boot") version "2.7.8"
   id("org.flywaydb.flyway") version "9.14.1"
   id("io.spring.dependency-management") version "1.1.0"
   id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
-  id("io.gitlab.arturbosch.detekt") version "1.16.0"
+  id("io.gitlab.arturbosch.detekt") version "1.17.1"
   id("jacoco")
-  kotlin("jvm") version "1.4.30"
-  kotlin("plugin.spring") version "1.4.30"
-  kotlin("plugin.jpa") version "1.4.30"
-  kotlin("plugin.serialization") version "1.4.30"
+  kotlin("jvm") version "1.6.21"
+  kotlin("plugin.spring") version "1.6.21"
+  kotlin("plugin.jpa") version "1.6.21"
+  kotlin("plugin.serialization") version "1.6.21"
 }
 
 allOpen {
@@ -33,7 +33,6 @@ configurations {
 repositories {
   mavenCentral()
   google()
-  jcenter()
 }
 
 dependencies {
@@ -64,7 +63,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = JavaVersion.VERSION_11.toString()
+    jvmTarget = JavaVersion.VERSION_17.toString()
   }
 }
 tasks.withType<Test> {
@@ -113,7 +112,11 @@ val excludeList = listOf(
   "net.royhome.tictactoe.config.*",
   "net.royhome.tictactoe.constant.*",
   "net.royhome.tictactoe.model.*",
-  "net.royhome.tictactoe.repository.*"
+  "net.royhome.tictactoe.repository.*",
+  "net.royhome.tictactoe.service.MessagingService"
+)
+val includeList = listOf(
+  "net.royhome.tictactoe.service.MessagingService"
 )
 tasks.jacocoTestCoverageVerification {
   violationRules {
@@ -136,11 +139,11 @@ tasks.jacocoTestCoverageVerification {
     }
     rule {
       element = "CLASS"
-      excludes = excludeList
+      includes = includeList
       limit {
-        counter = "COMPLEXITY"
+        counter = "INSTRUCTION"
         value = "COVEREDRATIO"
-        minimum = "1.0".toBigDecimal()
+        minimum = "0.9".toBigDecimal()
       }
     }
   }

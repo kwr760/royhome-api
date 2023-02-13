@@ -74,7 +74,12 @@ class GameServiceTests {
     val player = Player(playerId, "Player Name", PieceEnum.X.name, game)
     val opponent = Player(opponentId, "Opponent Name", PieceEnum.O.name, game)
     game.players.addAll(listOf(player, opponent))
-    val expectedResult = Game(gameId, GameStateEnum.Closed.value, Constants.InitialBoard, mutableSetOf(player, opponent))
+    val expectedResult = Game(
+      gameId,
+      GameStateEnum.Closed.value,
+      Constants.InitialBoard,
+      mutableSetOf(player, opponent)
+    )
     every { playerRepositoryMock.findBySessionId(any()) } returns player
     every { gameRepositoryMock.findByGameId(any()) } returns game
     every { gameRepositoryMock.deleteByGameId(any()) } returns Unit
@@ -194,7 +199,12 @@ class GameServiceTests {
     val player = Player(playerId, playerName, PieceEnum.X.name, game)
     val opponent = Player(opponentId, opponentName, PieceEnum.O.name, game)
     players.add(opponent)
-    val expectedResult = Game(gameId, GameStateEnum.Closed.value, Constants.InitialBoard, mutableSetOf(opponent, player))
+    val expectedResult = Game(
+      gameId,
+      GameStateEnum.Closed.value,
+      Constants.InitialBoard,
+      mutableSetOf(opponent, player)
+    )
     every { playerRepositoryMock.findBySessionId(any()) } returns null
     every { gameRepositoryMock.findByEarliestState(any()) } returns game
     every { gameRepositoryMock.save(any()) } returns game

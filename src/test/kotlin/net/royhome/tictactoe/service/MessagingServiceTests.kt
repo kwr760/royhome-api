@@ -14,6 +14,7 @@ import net.royhome.tictactoe.model.Player
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.messaging.simp.SimpMessagingTemplate
 
 class MessagingServiceTests {
@@ -23,7 +24,6 @@ class MessagingServiceTests {
   @BeforeEach
   fun setUpBeforeEach() {
     underTest = MessagingService()
-    underTest.template = template
   }
 
   @Test
@@ -35,6 +35,7 @@ class MessagingServiceTests {
     val serviceResponse = Message(MessageActionEnum.TakeTurn)
 
     // Act
+    underTest.template = template
     val response = underTest.send(serviceResponse, sessionId)
 
     // Assert
@@ -60,11 +61,25 @@ class MessagingServiceTests {
     players.add(two)
 
     // Act
+    underTest.template = template
     val response = underTest.send(serviceResponse, players.toList())
 
     // Assert
     Assertions.assertEquals(response, Unit)
     verify(exactly = 1) { template.convertAndSend(oneDest, serviceResponse) }
     verify(exactly = 1) { template.convertAndSend(twoDest, serviceResponse) }
+  }
+
+  @Test
+  fun `messagingService no template`() {
+    // Arrange
+    val sessionId: UUID = UUID.randomUUID()
+    every { template.convertAndSend(any(), any<Game>()) } returns Unit
+    val serviceResponse = Message(MessageActionEnum.TakeTurn)
+
+    // Act
+    assertThrows<UninitializedPropertyAccessException> {
+      underTest.send(serviceResponse, sessionId)
+    }
   }
 }
