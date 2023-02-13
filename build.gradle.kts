@@ -6,22 +6,22 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
 plugins {
-  id("org.springframework.boot") version "2.7.8"
+  id("org.springframework.boot") version "3.0.2"
   id("org.flywaydb.flyway") version "9.14.1"
   id("io.spring.dependency-management") version "1.1.0"
   id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
   id("io.gitlab.arturbosch.detekt") version "1.17.1"
   id("jacoco")
-  kotlin("jvm") version "1.6.21"
-  kotlin("plugin.spring") version "1.6.21"
-  kotlin("plugin.jpa") version "1.6.21"
-  kotlin("plugin.serialization") version "1.6.21"
+  kotlin("jvm") version "1.8.10"
+  kotlin("plugin.spring") version "1.8.10"
+  kotlin("plugin.jpa") version "1.8.10"
+  kotlin("plugin.serialization") version "1.8.10"
 }
 
 allOpen {
-  annotation("javax.persistence.Entity")
-  annotation("javax.persistence.MappedSuperclass")
-  annotation("javax.persistence.Embeddable")
+  annotation("jakarta.persistence.Entity")
+  annotation("jakarta.persistence.MappedSuperclass")
+  annotation("jakarta.persistence.Embeddable")
 }
 
 configurations {
