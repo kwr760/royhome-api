@@ -1,7 +1,5 @@
 package net.royhome.api.model
 
-import java.sql.Timestamp
-import java.util.UUID
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -9,6 +7,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import java.sql.Timestamp
+import java.util.UUID
 
 @Entity
 @Table(schema = "session")

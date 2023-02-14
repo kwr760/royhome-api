@@ -10,7 +10,7 @@ plugins {
   id("org.flywaydb.flyway") version "9.14.1"
   id("io.spring.dependency-management") version "1.1.0"
   id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
-  id("io.gitlab.arturbosch.detekt") version "1.17.1"
+  id("io.gitlab.arturbosch.detekt") version "1.22.0"
   id("jacoco")
   kotlin("jvm") version "1.8.10"
   kotlin("plugin.spring") version "1.8.10"
@@ -48,7 +48,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
   implementation("io.springfox:springfox-boot-starter:3.0.0")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
   implementation("com.google.code.gson:gson:2.10.1")
 
   compileOnly("org.projectlombok:lombok")
@@ -57,7 +57,7 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("io.mockk:mockk:1.11.0")
+  testImplementation("io.mockk:mockk:1.13.4")
 }
 
 tasks.withType<KotlinCompile> {
