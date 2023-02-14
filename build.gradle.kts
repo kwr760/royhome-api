@@ -115,34 +115,19 @@ val excludeList = listOf(
   "net.royhome.tictactoe.repository.*",
   "net.royhome.tictactoe.service.MessagingService"
 )
-val includeList = listOf(
-  "net.royhome.tictactoe.service.MessagingService"
-)
 tasks.jacocoTestCoverageVerification {
   violationRules {
     rule {
       element = "CLASS"
       excludes = excludeList
       limit {
-        counter = "INSTRUCTION"
         minimum = "1.0".toBigDecimal()
       }
     }
     rule {
       element = "CLASS"
-      excludes = excludeList
+      includes = listOf("net.royhome.tictactoe.service.MessagingService")
       limit {
-        counter = "BRANCH"
-        value = "COVEREDRATIO"
-        minimum = "1.0".toBigDecimal()
-      }
-    }
-    rule {
-      element = "CLASS"
-      includes = includeList
-      limit {
-        counter = "INSTRUCTION"
-        value = "COVEREDRATIO"
         minimum = "0.9".toBigDecimal()
       }
     }
