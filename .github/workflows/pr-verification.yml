@@ -22,8 +22,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '11'
+          distribution: 'corretto'
+          java-version: '17'
       - name: Run build
         run: |
           ./gradlew clean build
