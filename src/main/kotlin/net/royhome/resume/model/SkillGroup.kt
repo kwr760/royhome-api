@@ -36,5 +36,5 @@ class SkillGroup(
   val name: String = "",
   @OneToMany(mappedBy = "skillGroup", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   @OrderBy(clause = "position")
-  val skills: List<Skill>,
+  val skills: Set<Skill>,
 )
