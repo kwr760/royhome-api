@@ -103,16 +103,12 @@ tasks.jacocoTestReport {
 
 val excludeList = listOf(
   "net.royhome.Application*",
-  "net.royhome.api.config.*",
-  "net.royhome.api.constant.*",
-  "net.royhome.api.model.*",
-  "net.royhome.api.repository.*",
+  "net.royhome.*.config.*",
+  "net.royhome.*.constant.*",
+  "net.royhome.*.model.*",
+  "net.royhome.*.repository.*",
   "net.royhome.resume.model.*",
   "net.royhome.resume.repository.*",
-  "net.royhome.tictactoe.config.*",
-  "net.royhome.tictactoe.constant.*",
-  "net.royhome.tictactoe.model.*",
-  "net.royhome.tictactoe.repository.*",
   "net.royhome.tictactoe.service.MessagingService"
 )
 tasks.jacocoTestCoverageVerification {
