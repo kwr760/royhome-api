@@ -81,13 +81,6 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
-  ComplexMethod:
-    active: true
-    threshold: 15
-    ignoreSingleWhenExpression: false
-    ignoreSimpleWhenEntries: false
-    ignoreNestingFunctions: false
-    nestingFunctions: [run, let, apply, with, also, use, forEach, isNotNull, ifNull]
   LabeledExpression:
     active: false
     ignoredLabels: []
@@ -352,8 +345,6 @@ potential-bugs:
     active: false
   DontDowncastCollectionTypes:
     active: false
-  DuplicateCaseInWhenExpression:
-    active: true
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
   EqualsWithHashCodeExist:
@@ -364,10 +355,6 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: false
-  IgnoredReturnValue:
-    active: false
-    restrictToAnnotatedMethods: true
-    returnValueAnnotations: ['*.CheckReturnValue', '*.CheckResult']
   ImplicitDefaultLocale:
     active: true
   ImplicitUnitReturnType:
@@ -382,17 +369,11 @@ potential-bugs:
   LateinitUsage:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    excludeAnnotatedProperties: []
     ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
     active: false
-  MissingWhenCase:
-    active: true
-    allowElseExpression: true
   NullableToStringCall:
     active: false
-  RedundantElseInWhen:
-    active: true
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullOperator:
@@ -422,7 +403,7 @@ style:
     active: false
   DataClassContainsFunctions:
     active: false
-    conversionFunctionPrefix: 'to'
+    conversionFunctionPrefix: ['to']
   DataClassShouldBeImmutable:
     active: false
   DestructuringDeclarationWithTooManyEntries:
@@ -450,10 +431,6 @@ style:
   ForbiddenMethodCall:
     active: false
     methods: ['kotlin.io.println', 'kotlin.io.print']
-  ForbiddenPublicDataClass:
-    active: true
-    excludes: ['**']
-    ignorePackages: ['*.internal', '*.internal.*']
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
@@ -462,14 +439,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     ignoreActualFunction: true
-    excludedFunctions: 'describeContents'
-    excludeAnnotatedFunction: ['dagger.Provides']
-  LibraryCodeMustSpecifyReturnType:
-    active: true
-    excludes: ['**']
-  LibraryEntitiesShouldNotBePublic:
-    active: true
-    excludes: ['**']
+    excludedFunctions: ['describeContents']
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -528,7 +498,7 @@ style:
   ReturnCount:
     active: true
     max: 2
-    excludedFunctions: 'equals'
+    excludedFunctions: ['equals']
     excludeLabeled: false
     excludeReturnFromLambda: true
     excludeGuardClauses: false
@@ -545,10 +515,8 @@ style:
     active: false
   UnderscoresInNumericLiterals:
     active: false
-    acceptableDecimalLength: 5
   UnnecessaryAbstractClass:
     active: true
-    excludeAnnotatedClasses: ['dagger.Module']
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
@@ -578,7 +546,6 @@ style:
     active: false
   UseDataClass:
     active: false
-    excludeAnnotatedClasses: []
     allowVars: false
   UseEmptyCounterpart:
     active: false
