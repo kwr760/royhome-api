@@ -3,6 +3,7 @@ package net.royhome.api.controller
 import io.mockk.mockk
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,20 +23,18 @@ class LogControllerTests {
     System.setOut(PrintStream(outContent, true, "UTF-8"))
   }
 
+  @AfterEach
   fun tearDown() {
     System.setOut(stdout)
   }
 
   @Test
   fun `logController accepts request and prints log`() {
-    // Arrange
     val msg = "Message"
-    val expected = "Message\n"
+    val expected = "Message" + System.lineSeparator()
 
-    // Act
     underTest.log(msg)
 
-    // Assert
     Assertions.assertEquals(expected, outContent.toString())
   }
 }

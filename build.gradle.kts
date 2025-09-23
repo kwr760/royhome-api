@@ -95,9 +95,9 @@ tasks.jacocoTestReport {
   finalizedBy(tasks.jacocoTestCoverageVerification)
   dependsOn(tasks.test) // tests are required to run before generating the report
   reports {
-    xml.isEnabled = true
-    csv.isEnabled = false
-    html.destination = file("$buildDir/reports/coverage")
+    xml.required.set(true)
+    csv.required.set(false)
+    html.outputLocation.set(file("$buildDir/reports/coverage"))
   }
 }
 
