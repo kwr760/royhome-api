@@ -6,6 +6,16 @@ A spring rest api server with a postgres database connection.
 
 Serving the resume of Kevin Roy stored in the postgres database.
 
+## Installation
+
+### Windows Set up
+
+If installing to a new environment, the version might need to be updated
+
+1. Install Postgres - postgres/postgres
+2. Install pgAdmin
+3. 
+
 ## Set Up
 
 Running the server requires some environment to set up.  This was done to
