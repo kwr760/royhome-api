@@ -12,14 +12,14 @@ import java.util.UUID
 @Entity
 @Table(schema = "tracker")
 class Group(
-  @Id
-  @Column(name = "group_id")
-  var groupId: UUID? = null,
+    @Id
+    @Column(name = "group_id")
+    var groupId: UUID? = null,
 
-  var userId: UUID? = null,
+    var userId: UUID? = null,
 
-  var name: String? = null,
+    var name: String? = null,
 
-  @OneToMany(mappedBy = "group", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  val activities: MutableSet<Activity>? = null,
+    @OneToMany(mappedBy = "group", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    val activities: MutableSet<Activity>? = null,
 )

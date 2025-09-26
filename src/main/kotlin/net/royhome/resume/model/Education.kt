@@ -15,17 +15,17 @@ import java.util.UUID
 @Entity
 @Table(schema = "resume")
 class Education(
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "education_id")
-  val id: UUID = UUID.randomUUID(),
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "education_id")
+    val id: UUID = UUID.randomUUID(),
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "resume_id")
-  @JsonBackReference
-  val resume: Resume,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "resume_id")
+    @JsonBackReference
+    val resume: Resume,
 
-  val school: String = "",
-  val degree: String = "",
-  val graduation: String = "",
+    val school: String = "",
+    val degree: String = "",
+    val graduation: String = "",
 )

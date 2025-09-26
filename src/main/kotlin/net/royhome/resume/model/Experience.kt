@@ -13,34 +13,34 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import java.util.UUID
 import org.hibernate.annotations.OrderBy
+import java.util.UUID
 
 @Entity
 @Table(schema = "resume")
 @Suppress("LongParameterList")
 class Experience(
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "experience_id")
-  val id: UUID = UUID.randomUUID(),
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "experience_id")
+    val id: UUID = UUID.randomUUID(),
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "resume_id")
-  @JsonBackReference
-  val resume: Resume,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "resume_id")
+    @JsonBackReference
+    val resume: Resume,
 
-  val title: String? = null,
-  val company: String? = null,
-  val startDate: String? = null,
-  val endDate: String? = null,
-  @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  @OrderBy(clause = "position")
-  val description: Set<ExperienceDescription>,
-  @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  @OrderBy(clause = "position")
-  val bullets: Set<ExperienceBullet>,
-  @OneToOne(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  @OrderBy(clause = "position")
-  val tech: SkillGroup,
+    val title: String? = null,
+    val company: String? = null,
+    val startDate: String? = null,
+    val endDate: String? = null,
+    @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OrderBy(clause = "position")
+    val description: Set<ExperienceDescription>,
+    @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OrderBy(clause = "position")
+    val bullets: Set<ExperienceBullet>,
+    @OneToOne(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OrderBy(clause = "position")
+    val tech: SkillGroup,
 )

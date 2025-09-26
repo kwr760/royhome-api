@@ -8,13 +8,13 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class MaintenanceService(
-  val gameRepository: GameRepository,
-  val playerRepository: PlayerRepository,
+    val gameRepository: GameRepository,
+    val playerRepository: PlayerRepository,
 ) {
-  @Transactional
-  @Scheduled(cron = "0 0/5 * * * *")
-  fun removeOldGames() {
-    playerRepository.deleteWhenAnHourOld()
-    gameRepository.deleteWhenAnHourOld()
-  }
+    @Transactional
+    @Scheduled(cron = "0 0/5 * * * *")
+    fun removeOldGames() {
+        playerRepository.deleteWhenAnHourOld()
+        gameRepository.deleteWhenAnHourOld()
+    }
 }

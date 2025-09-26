@@ -13,20 +13,20 @@ import java.util.UUID
 @Entity
 @Table(schema = "tictactoe")
 class Player(
-  @Id
-  @Column(name = "session_id")
-  var sessionId: UUID,
+    @Id
+    @Column(name = "session_id")
+    var sessionId: UUID,
 
-  var name: String,
+    var name: String,
 
-  var piece: String,
+    var piece: String,
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "game_id")
-  @JsonBackReference
-  val game: Game,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "game_id")
+    @JsonBackReference
+    val game: Game,
 ) {
-  override fun toString(): String {
-    return "Player(sessionId=$sessionId, name=$name)"
-  }
+    override fun toString(): String {
+        return "Player(sessionId=$sessionId, name=$name)"
+    }
 }

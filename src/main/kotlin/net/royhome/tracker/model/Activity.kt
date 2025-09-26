@@ -13,16 +13,16 @@ import java.util.UUID
 @Entity
 @Table(schema = "tracker")
 class Activity(
-  @Id
-  @Column(name = "activity_id")
-  var activityId: UUID? = null,
+    @Id
+    @Column(name = "activity_id")
+    var activityId: UUID? = null,
 
-  var platform: String = "",
-  var activity: String = "",
-  var progress: String = "",
+    var platform: String = "",
+    var activity: String = "",
+    var progress: String = "",
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "group_id")
-  @JsonBackReference
-  val group: Group,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    @JsonBackReference
+    val group: Group,
 )

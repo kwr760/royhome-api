@@ -15,15 +15,15 @@ import java.util.UUID
 @Entity
 @Table(schema = "resume")
 class ExperienceBullet(
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "bullet_id")
-  val id: UUID = UUID.randomUUID(),
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "bullet_id")
+    val id: UUID = UUID.randomUUID(),
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "experience_id")
-  @JsonBackReference
-  val experience: Experience,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "experience_id")
+    @JsonBackReference
+    val experience: Experience,
 
-  val name: String = "",
+    val name: String = "",
 )

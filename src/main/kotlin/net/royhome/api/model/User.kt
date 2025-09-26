@@ -10,10 +10,10 @@ import java.util.UUID
 @Entity
 @Table(schema = "session")
 class User(
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  var userId: UUID? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var userId: UUID? = null,
 
-  val email: String,
-  val context: String? = null,
+    val email: String,
+    val context: String? = null,
 )

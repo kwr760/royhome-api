@@ -7,24 +7,24 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import java.util.UUID
 import net.royhome.tictactoe.constant.Constants
+import java.util.UUID
 
 @Entity
 @Table(schema = "tictactoe")
 class Game(
-  @Id
-  @Column(name = "game_id")
-  var gameId: UUID,
+    @Id
+    @Column(name = "game_id")
+    var gameId: UUID,
 
-  var state: Int,
+    var state: Int,
 
-  var board: String = Constants.InitialBoard,
+    var board: String = Constants.InitialBoard,
 
-  @OneToMany(mappedBy = "game", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-  val players: MutableSet<Player>,
+    @OneToMany(mappedBy = "game", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    val players: MutableSet<Player>,
 ) {
-  override fun toString(): String {
-    return "Game(gameId=$gameId, state=$state, players=$players)"
-  }
+    override fun toString(): String {
+        return "Game(gameId=$gameId, state=$state, players=$players)"
+    }
 }

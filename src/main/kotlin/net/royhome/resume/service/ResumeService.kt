@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class ResumeService(
-  val repository: ResumeRepository
+    val repository: ResumeRepository
 ) {
-  fun getResume(email: String): Resume {
-    return repository.findByEmail(email)
-  }
+    fun getResume(email: String): Resume {
+        return repository.findByEmail(email)
+    }
 }
