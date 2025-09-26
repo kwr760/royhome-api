@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>SwallowedException:SessionController.kt$SessionController$e: EmptyResultDataAccessException</ID>
+  </CurrentIssues>
+</SmellBaseline>
