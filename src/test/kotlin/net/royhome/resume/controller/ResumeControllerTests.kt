@@ -16,51 +16,51 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 class ResumeControllerTests {
-  private lateinit var underTest: ResumeController
-  private lateinit var resumeServiceMock: ResumeService
+    private lateinit var underTest: ResumeController
+    private lateinit var resumeServiceMock: ResumeService
 
-  @BeforeEach
-  fun setUp() {
-    resumeServiceMock = mockk(relaxed = true)
-    underTest = ResumeController(resumeServiceMock)
-  }
+    @BeforeEach
+    fun setUp() {
+        resumeServiceMock = mockk(relaxed = true)
+        underTest = ResumeController(resumeServiceMock)
+    }
 
-  @Test
-  fun `resumeController accepts request and returns response`() {
-    // Arrange - input
-    val email = "person@email.com"
-    // Arrange - mocks
-    val resumeMock: Resume = mockk()
-    every { resumeServiceMock.getResume(any()) } answers { resumeMock }
-    // Arrange - response
-    val expectedResponse = ResponseEntity.ok(Response(resumeMock, Result(true, "Success")))
+    @Test
+    fun `resumeController accepts request and returns response`() {
+        // Arrange - input
+        val email = "person@email.com"
+        // Arrange - mocks
+        val resumeMock: Resume = mockk()
+        every { resumeServiceMock.getResume(any()) } answers { resumeMock }
+        // Arrange - response
+        val expectedResponse = ResponseEntity.ok(Response(resumeMock, Result(true, "Success")))
 
-    // Act
-    val response = underTest.getResume(email)
+        // Act
+        val response = underTest.getResume(email)
 
-    // Assert
-    Assertions.assertEquals(expectedResponse, response)
-    verify(exactly = 1) { resumeServiceMock.getResume(any()) }
-  }
+        // Assert
+        Assertions.assertEquals(expectedResponse, response)
+        verify(exactly = 1) { resumeServiceMock.getResume(any()) }
+    }
 
-  @Test
-  fun `resumeController handles exception well`() {
-    // Arrange - input
-    val email = "person@email.com"
-    // Arrange - mocks
-    val errorMessage = "Error Message"
-    val exception: DataAccessException = DataRetrievalFailureException(errorMessage)
-    every { resumeServiceMock.getResume(any()) } throws exception
-    // Arrange - response
-    val expectedResponse = ResponseEntity
-      .status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .body(Response(null, Result(false, errorMessage)))
+    @Test
+    fun `resumeController handles exception well`() {
+        // Arrange - input
+        val email = "person@email.com"
+        // Arrange - mocks
+        val errorMessage = "Error Message"
+        val exception: DataAccessException = DataRetrievalFailureException(errorMessage)
+        every { resumeServiceMock.getResume(any()) } throws exception
+        // Arrange - response
+        val expectedResponse = ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(Response(null, Result(false, errorMessage)))
 
-    // Act
-    val response = underTest.getResume(email)
+        // Act
+        val response = underTest.getResume(email)
 
-    // Assert
-    Assertions.assertEquals(expectedResponse, response)
-    verify(exactly = 1) { resumeServiceMock.getResume(any()) }
-  }
+        // Assert
+        Assertions.assertEquals(expectedResponse, response)
+        verify(exactly = 1) { resumeServiceMock.getResume(any()) }
+    }
 }

@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ResumeController(
-  val service: ResumeService
+    val service: ResumeService
 ) {
-  @GetMapping("resume/{email}")
-  fun getResume(@PathVariable("email") email: String): ResponseEntity<Response<Resume>> {
-    return try {
-      val resume = service.getResume(email)
-      ResponseEntity.ok(Response(resume, Result(true, Constant.SUCCESS)))
-    } catch (e: DataAccessException) {
-      ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(Response(null, Result(false, e.message.toString())))
+    @GetMapping("resume/{email}")
+    fun getResume(@PathVariable("email") email: String): ResponseEntity<Response<Resume>> {
+        return try {
+            val resume = service.getResume(email)
+            ResponseEntity.ok(Response(resume, Result(true, Constant.SUCCESS)))
+        } catch (e: DataAccessException) {
+            ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Response(null, Result(false, e.message.toString())))
+        }
     }
-  }
 }

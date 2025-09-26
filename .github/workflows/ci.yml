@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permissions for gradlew
+        run: chmod +x gradlew
+
+      - name: Build (clean, check, tests, reports)
+        run: ./gradlew --no-daemon clean build jacocoTestReport
+
+      - name: Run static analysis (Detekt)
+        run: |
+          # Run Detekt (including detekt-formatting for ktlint rules). Detekt is configured
+          # to use config/detekt/detekt-baseline.xml which is committed to the repo so CI
+          # will only fail on new issues.
+          ./gradlew --no-daemon detekt
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            build/libs/*.jar
+            build/reports/jacoco
+            build/reports/tests
+
+  publish-openapi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/master'))
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build OpenAPI JSON
+        run: ./gradlew --no-daemon bootJar
+      - name: Run app and dump OpenAPI
+        run: |
+          ./gradlew --no-daemon bootRun &
+          sleep 10
+          curl -fSL http://localhost:8080/v3/api-docs -o openapi.json
+          pkill -f java || true
+      - name: Upload openapi
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi
+          path: openapi.json

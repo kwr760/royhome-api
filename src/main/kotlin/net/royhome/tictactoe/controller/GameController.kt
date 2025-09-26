@@ -13,66 +13,66 @@ import org.springframework.stereotype.Controller
 
 @Controller
 class GameController(
-  val gameService: GameService,
-  val msgService: MessagingService,
-  val toolkit: ToolkitService,
+    val gameService: GameService,
+    val msgService: MessagingService,
+    val toolkit: ToolkitService,
 ) {
-  @MessageMapping("/start")
-  fun startGame(action: StartAction) {
-    val game = gameService.joinGame(action.sessionId, action.name)
-    val nextPlayer = toolkit.getNextPlayer(game.board)
+    @MessageMapping("/start")
+    fun startGame(action: StartAction) {
+        val game = gameService.joinGame(action.sessionId, action.name)
+        val nextPlayer = toolkit.getNextPlayer(game.board)
 
-    when (game.players.count()) {
-      1 -> { return }
+        when (game.players.count()) {
+            1 -> { return }
 
-      2 -> {
-        msgService.send(
-          Message(
-            action = MessageActionEnum.SetPlayers,
-            game
-          ),
-          game.players.toList()
-        )
-        msgService.send(
-          Message(
-            action = MessageActionEnum.TakeTurn,
-            game
-          ),
-          game.players.filter { it.piece == nextPlayer.name }
-        )
-      }
+            2 -> {
+                msgService.send(
+                    Message(
+                        action = MessageActionEnum.SetPlayers,
+                        game
+                    ),
+                    game.players.toList()
+                )
+                msgService.send(
+                    Message(
+                        action = MessageActionEnum.TakeTurn,
+                        game
+                    ),
+                    game.players.filter { it.piece == nextPlayer.name }
+                )
+            }
 
-      else -> {
-        throw IndexOutOfBoundsException("Received an unexpected number of players")
-      }
+            else -> {
+                throw IndexOutOfBoundsException("Received an unexpected number of players")
+            }
+        }
     }
-  }
 
-  @MessageMapping("/end")
-  fun endGame(action: EndAction) {
-    val game = gameService.endGame(action.sessionId)
-    val players = if (game !== null) game.players else mutableSetOf()
+    @MessageMapping("/end")
+    fun endGame(action: EndAction) {
+        val game = gameService.endGame(action.sessionId)
+        val players = if (game !== null) game.players else mutableSetOf()
 
-    msgService.send(
-      Message(
-        action = MessageActionEnum.EndGame,
-        game,
-        action.reason
-      ),
-      players.toList()
-    )
-  }
+        msgService.send(
+            Message(
+                action = MessageActionEnum.EndGame,
+                game,
+                action.reason
+            ),
+            players.toList()
+        )
+    }
 
-  @MessageMapping("/turn")
-  fun takeTurn(action: PlayAction) {
-    val game = gameService.updateGame(action.sessionId, action.board)
-    val players = if (game !== null) game.players else mutableSetOf()
-    msgService.send(
-      Message(
-        action = MessageActionEnum.TakeTurn,
-        game
-      ),
-      players.filter { it.sessionId != action.sessionId },
-    )
-  }
+    @MessageMapping("/turn")
+    fun takeTurn(action: PlayAction) {
+        val game = gameService.updateGame(action.sessionId, action.board)
+        val players = if (game !== null) game.players else mutableSetOf()
+        msgService.send(
+            Message(
+                action = MessageActionEnum.TakeTurn,
+                game
+            ),
+            players.filter { it.sessionId != action.sessionId },
+        )
+    }
 }

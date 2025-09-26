@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class LogController {
-  @PutMapping("log")
-  fun log(
-    @RequestBody body: Any,
-  ) {
-    println(body.toString())
-  }
+    @PutMapping("log")
+    fun log(
+        @RequestBody body: Any,
+    ) {
+        println(body.toString())
+    }
 }

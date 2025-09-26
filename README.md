@@ -6,6 +6,16 @@ A spring rest api server with a postgres database connection.
 
 Serving the resume of Kevin Roy stored in the postgres database.
 
+## Installation
+
+### Windows Set up
+
+If installing to a new environment, the version might need to be updated
+
+1. Install Postgres - postgres/postgres
+2. Install pgAdmin
+3. 
+
 ## Set Up
 
 Running the server requires some environment to set up.  This was done to
@@ -104,6 +114,40 @@ Example: Development
 ```shell
 gradlew -Dspring.profiles.active=dev bootrun
 ```
+
+#### Running tests locally
+
+The project includes unit tests and a small Testcontainers-based integration check. On Windows (PowerShell) the easiest way to run tests locally is to ensure Docker Desktop is running, then run Gradle from the repository root.
+
+```powershell
+# Run the full test suite (will start Docker for Testcontainers-based tests)
+./gradlew --no-daemon test
+
+# Run a single test class (faster; avoids starting unrelated integration tests)
+./gradlew --no-daemon test --tests "net.royhome.DbIntegrationTest"
+
+# Clean build and tests
+./gradlew --no-daemon clean test
+```
+
+### Regenerating the Detekt baseline
+
+If you need to regenerate the Detekt baseline (for example after updating rules or bumping Detekt), you can use the Detekt CLI to create a new baseline file. From the repository root (PowerShell):
+
+```powershell
+# Download the detekt CLI "all" jar (adjust version if needed)
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/io/gitlab/arturbosch/detekt/detekt-cli/1.23.8/detekt-cli-1.23.8-all.jar" -OutFile .\detekt-cli-1.23.8-all.jar
+
+# Run the CLI to create a baseline at config/detekt/detekt-baseline.xml
+& "$env:JAVA_HOME\bin\java.exe" -cp .\detekt-cli-1.23.8-all.jar io.gitlab.arturbosch.detekt.cli.Main --input src/main/kotlin --config config/detekt/detekt.yml --create-baseline --baseline config/detekt/detekt-baseline.xml --parallel --report xml:build/reports/detekt/report_baseline.xml --debug
+
+# The baseline file created will be at config/detekt/detekt-baseline.xml — commit it to the repo if you want CI to use it.
+```
+
+Notes
+- Testcontainers requires Docker to be available on the machine. Start Docker Desktop before running the full test suite.
+- If you see database migration or Flyway-related errors when running tests that load the full Spring context, try running the container-only test (above) or run unit tests that don't start the Spring context.
+- If you want CI-style runs on a developer machine, use the `--no-daemon` flag above to better match CI behavior.
 
 #### docker
 
