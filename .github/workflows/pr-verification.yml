@@ -27,7 +27,7 @@ jobs:
       - name: Run build
         run: |
           ./gradlew clean build
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v5
         with:
           directory: ./build/jacoco
           verbose: true # optional (default = false)
