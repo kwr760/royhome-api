@@ -9,23 +9,23 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketMessageBrokerConfig : WebSocketMessageBrokerConfigurer {
-  override fun configureMessageBroker(config: MessageBrokerRegistry) {
-    config.enableSimpleBroker(
-      "/start",
-      "/end",
-      "/turn",
-      "/session"
-    )
-  }
+    override fun configureMessageBroker(config: MessageBrokerRegistry) {
+        config.enableSimpleBroker(
+            "/start",
+            "/end",
+            "/turn",
+            "/session"
+        )
+    }
 
-  override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-    registry
-      .addEndpoint("/tictactoe")
-      .setAllowedOrigins(
-        "https://royk.us",
-        "https://royhome.net",
-        "https://www.royk.us",
-        "https://www.royhome.net"
-      )
-  }
+    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
+        registry
+            .addEndpoint("/tictactoe")
+            .setAllowedOrigins(
+                "https://royk.us",
+                "https://royhome.net",
+                "https://www.royk.us",
+                "https://www.royhome.net"
+            )
+    }
 }

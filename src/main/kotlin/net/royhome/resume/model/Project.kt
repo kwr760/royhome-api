@@ -16,19 +16,19 @@ import java.util.UUID
 @Table(schema = "resume")
 @Suppress("LongParameterList")
 class Project(
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "project_id")
-  val id: UUID = UUID.randomUUID(),
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "project_id")
+    val id: UUID = UUID.randomUUID(),
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "resume_id")
-  @JsonBackReference
-  val resume: Resume,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "resume_id")
+    @JsonBackReference
+    val resume: Resume,
 
-  val name: String = "",
-  val url: String = "",
-  val description: String = "",
-  val startDate: String? = null,
-  val endDate: String? = null,
+    val name: String = "",
+    val url: String = "",
+    val description: String = "",
+    val startDate: String? = null,
+    val endDate: String? = null,
 )

@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class RequestExceptionHandler {
-  @ExceptionHandler
-  fun handleRequestException(e: HttpMessageConversionException): ResponseEntity<Any> {
-    return ResponseEntity<Any>(
-      e.message.toString(), HttpHeaders(), HttpStatus.BAD_REQUEST
-    )
-  }
+    @ExceptionHandler
+    fun handleRequestException(e: HttpMessageConversionException): ResponseEntity<Any> {
+        return ResponseEntity<Any>(
+            e.message.toString(),
+            HttpHeaders(),
+            HttpStatus.BAD_REQUEST
+        )
+    }
 }

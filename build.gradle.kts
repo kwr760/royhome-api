@@ -9,14 +9,15 @@ plugins {
   id("org.springframework.boot") version "3.5.6"
   id("org.flywaydb.flyway") version "9.14.1"
   id("io.spring.dependency-management") version "1.1.0"
-  id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
-  id("io.gitlab.arturbosch.detekt") version "1.22.0"
+  id("io.gitlab.arturbosch.detekt") version "1.23.8"
   id("jacoco")
-  kotlin("jvm") version "1.9.20"
-  kotlin("plugin.spring") version "1.9.20"
-  kotlin("plugin.jpa") version "1.9.20"
-  kotlin("plugin.serialization") version "1.9.20"
+  kotlin("jvm") version "2.0.21"
+  kotlin("plugin.spring") version "2.0.21"
+  kotlin("plugin.jpa") version "2.0.21"
+  kotlin("plugin.serialization") version "2.0.21"
 }
+
+// Using detekt-formatting (ktlint rules via Detekt) instead of the ktlint Gradle plugin
 
 allOpen {
   annotation("jakarta.persistence.Entity")
@@ -29,6 +30,8 @@ configurations {
     extendsFrom(configurations.annotationProcessor.get())
   }
 }
+
+// (ktlint plugin removed) No extra ktlint-specific configuration needed
 
 repositories {
   mavenCentral()
@@ -59,6 +62,15 @@ dependencies {
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("io.mockk:mockk:1.13.4")
+  // Testcontainers for DB integration tests
+  testImplementation("org.testcontainers:junit-jupiter:1.19.0")
+  testImplementation("org.testcontainers:postgresql:1.19.0")
+
+  // Provide Kotlin compiler classes to detekt so metric-based rules can run (used for detektBaseline)
+  // detektPlugins("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.20")
+  // Apply ktlint rules through Detekt to avoid ktlint Gradle plugin classpath issues
+  detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+
 }
 
 tasks.withType<KotlinCompile> {
@@ -87,10 +99,7 @@ tasks.test {
   finalizedBy(tasks.jacocoTestReport)
 }
 tasks.check {
-  finalizedBy(
-    tasks.jacocoTestReport,
-    tasks.ktlintCheck
-  )
+  finalizedBy(tasks.jacocoTestReport)
 }
 tasks.jacocoTestReport {
   finalizedBy(tasks.jacocoTestCoverageVerification)
@@ -101,6 +110,8 @@ tasks.jacocoTestReport {
     html.outputLocation.set(file("$buildDir/reports/coverage"))
   }
 }
+
+// (ktlint plugin removed) No ktlint task toggles needed
 
 val excludeList = listOf(
   "net.royhome.Application*",
@@ -132,4 +143,20 @@ tasks.jacocoTestCoverageVerification {
 }
 jacoco {
   toolVersion = "0.8.10"
+}
+
+// Detekt configuration: use project config if present and build upon default rules
+detekt {
+  parallel = true
+  buildUponDefaultConfig = true
+  config = files("config/detekt/detekt.yml")
+  // keep historical issues in a baseline file so CI can fail on new issues only
+  // The detektBaseline task requires a baseline property to be configured so
+  // we provide the path here; the task will create the file when run.
+  baseline = file("config/detekt/detekt-baseline.xml")
+}
+
+// Enable auto-correction for Detekt (especially formatting rules)
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+  autoCorrect = true
 }

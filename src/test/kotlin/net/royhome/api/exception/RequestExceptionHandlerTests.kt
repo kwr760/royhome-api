@@ -9,27 +9,29 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageConversionException
 
 class RequestExceptionHandlerTests {
-  private lateinit var underTest: RequestExceptionHandler
+    private lateinit var underTest: RequestExceptionHandler
 
-  @BeforeEach
-  fun setUp() {
-    underTest = RequestExceptionHandler()
-  }
+    @BeforeEach
+    fun setUp() {
+        underTest = RequestExceptionHandler()
+    }
 
-  @Test
-  fun `requestExceptionHandler handles exceptions`() {
-    // Arrange - input
-    val errorMessage = "Error Message"
-    val exception = HttpMessageConversionException(errorMessage)
-    // Arrange - response
-    val expectedResponse: ResponseEntity<Any> = ResponseEntity<Any>(
-      errorMessage, HttpHeaders(), HttpStatus.BAD_REQUEST
-    )
+    @Test
+    fun `requestExceptionHandler handles exceptions`() {
+        // Arrange - input
+        val errorMessage = "Error Message"
+        val exception = HttpMessageConversionException(errorMessage)
+        // Arrange - response
+        val expectedResponse: ResponseEntity<Any> = ResponseEntity<Any>(
+            errorMessage,
+            HttpHeaders(),
+            HttpStatus.BAD_REQUEST
+        )
 
-    // Act
-    val response = underTest.handleRequestException(exception)
+        // Act
+        val response = underTest.handleRequestException(exception)
 
-    // Assert
-    Assertions.assertEquals(expectedResponse, response)
-  }
+        // Assert
+        Assertions.assertEquals(expectedResponse, response)
+    }
 }

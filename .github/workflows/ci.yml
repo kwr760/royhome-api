@@ -35,11 +35,12 @@ jobs:
       - name: Build (clean, check, tests, reports)
         run: ./gradlew --no-daemon clean build jacocoTestReport
 
-      - name: Run static analysis
+      - name: Run static analysis (Detekt)
         run: |
-          # Run Detekt and ktlint. Detekt is configured to use config/detekt/detekt-baseline.xml
-          # which is committed to the repo so CI will only fail on new issues.
-          ./gradlew --no-daemon detekt ktlintCheck
+          # Run Detekt (including detekt-formatting for ktlint rules). Detekt is configured
+          # to use config/detekt/detekt-baseline.xml which is committed to the repo so CI
+          # will only fail on new issues.
+          ./gradlew --no-daemon detekt
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

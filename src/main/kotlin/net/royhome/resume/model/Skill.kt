@@ -15,15 +15,15 @@ import java.util.UUID
 @Entity
 @Table(schema = "resume")
 class Skill(
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "skill_id")
-  val id: UUID = UUID.randomUUID(),
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "skill_id")
+    val id: UUID = UUID.randomUUID(),
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "group_id", insertable = false, updatable = false)
-  @JsonBackReference
-  val skillGroup: SkillGroup,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id", insertable = false, updatable = false)
+    @JsonBackReference
+    val skillGroup: SkillGroup,
 
-  val name: String = "",
+    val name: String = "",
 )
