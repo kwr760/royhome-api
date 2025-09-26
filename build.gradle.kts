@@ -14,7 +14,7 @@ plugins {
   kotlin("jvm") version "2.0.21"
   kotlin("plugin.spring") version "2.0.21"
   kotlin("plugin.jpa") version "2.0.21"
-  kotlin("plugin.serialization") version "2.0.21"
+  kotlin("plugin.serialization") version "2.2.20"
 }
 
 // Using detekt-formatting (ktlint rules via Detekt) instead of the ktlint Gradle plugin
