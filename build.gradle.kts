@@ -8,7 +8,7 @@ java.targetCompatibility = JavaVersion.VERSION_17
 plugins {
   id("org.springframework.boot") version "3.5.6"
   id("org.flywaydb.flyway") version "9.14.1"
-  id("io.spring.dependency-management") version "1.1.0"
+  id("io.spring.dependency-management") version "1.1.7"
   id("io.gitlab.arturbosch.detekt") version "1.23.8"
   id("jacoco")
   kotlin("jvm") version "2.0.21"
