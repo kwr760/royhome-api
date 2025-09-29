@@ -12,7 +12,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt") version "1.23.8"
   id("jacoco")
   kotlin("jvm") version "2.0.21"
-  kotlin("plugin.spring") version "2.0.21"
+  kotlin("plugin.spring") version "2.2.20"
   kotlin("plugin.jpa") version "2.0.21"
   kotlin("plugin.serialization") version "2.0.21"
 }
