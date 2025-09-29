@@ -51,7 +51,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
   // Replace Springfox with springdoc (OpenAPI 3) starter
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
   implementation("com.google.code.gson:gson:2.10.1")
 
