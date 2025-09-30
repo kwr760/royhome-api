@@ -24,7 +24,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL92Dialect
+        # Removed legacy explicit dialect (PostgreSQL92Dialect) so Hibernate 6 can auto-detect the correct dialect for Postgres 15
         ddl-auto: validate
   flyway:
     enabled: true
