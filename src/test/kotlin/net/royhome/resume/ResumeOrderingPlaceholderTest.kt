@@ -10,4 +10,3 @@ class ResumeOrderingPlaceholderTest {
         // no-op
     }
 }
-
