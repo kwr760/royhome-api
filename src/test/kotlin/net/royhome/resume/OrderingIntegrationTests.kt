@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test
 
 @Disabled("Ordering verification pending - cleaned after corruption")
 class OrderingIntegrationTests {
-  @Test
-  fun placeholder() {
-    // no-op placeholder; original file was corrupted and replaced.
-  }
+    @Test
+    fun placeholder() {
+        // no-op placeholder; original file was corrupted and replaced.
+    }
 }

@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test
 
 @Disabled("Ordering verification pending - placeholder after removing corrupted file")
 class ResumeOrderingPlaceholderTest {
-  @Test
-  fun placeholder() {
-    // no-op
-  }
+    @Test
+    fun placeholder() {
+        // no-op
+    }
 }
+
