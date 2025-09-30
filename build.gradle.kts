@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "net.roy"
 version = "0.0.1-SNAPSHOT"
@@ -75,10 +76,11 @@ dependencies {
 
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = JavaVersion.VERSION_17.toString()
+tasks.withType<KotlinCompile>().configureEach {
+  // Migrated to new compilerOptions DSL (kotlinOptions deprecated)
+  compilerOptions {
+    freeCompilerArgs.add("-Xjsr305=strict")
+    jvmTarget.set(JvmTarget.JVM_17)
   }
 }
 tasks.withType<Test> {
@@ -95,7 +97,8 @@ tasks.register("bootRunDev") {
   finalizedBy("bootRun")
 }
 tasks.bootRun {
-  systemProperties(System.getProperties().toMap() as Map<String, Object>)
+  // Avoid unchecked cast; build a typed Map<String, Any?>
+  systemProperties(System.getProperties().stringPropertyNames().associateWith { System.getProperty(it) })
 }
 tasks.test {
   finalizedBy(tasks.jacocoTestReport)
@@ -109,7 +112,8 @@ tasks.jacocoTestReport {
   reports {
     xml.required.set(true)
     csv.required.set(false)
-    html.outputLocation.set(file("$buildDir/reports/coverage"))
+    // Use layout.buildDirectory to avoid deprecated buildDir getter
+    html.outputLocation.set(layout.buildDirectory.dir("reports/coverage"))
   }
 }
 
@@ -167,7 +171,8 @@ jacoco {
 detekt {
   parallel = true
   buildUponDefaultConfig = true
-  config = files("config/detekt/detekt.yml")
+  // Use setFrom to avoid deprecated setter
+  config.setFrom("config/detekt/detekt.yml")
   // keep historical issues in a baseline file so CI can fail on new issues only
   // The detektBaseline task requires a baseline property to be configured so
   // we provide the path here; the task will create the file when run.
