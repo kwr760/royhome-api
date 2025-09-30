@@ -8,8 +8,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderColumn
 import jakarta.persistence.Table
-import org.hibernate.annotations.OrderBy
 import java.util.UUID
 
 @Entity
@@ -28,15 +28,15 @@ class Resume(
     val email: String = "",
     val summary: String = "",
     @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val skillGroups: Set<SkillGroup>,
+    @OrderColumn(name = "position")
+    val skillGroups: List<SkillGroup>,
     @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val education: Set<Education>,
+    @OrderColumn(name = "position")
+    val education: List<Education>,
     @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val experience: Set<Experience>,
+    @OrderColumn(name = "position")
+    val experience: List<Experience>,
     @OneToMany(mappedBy = "resume", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val project: Set<Project>,
+    @OrderColumn(name = "position")
+    val project: List<Project>,
 )

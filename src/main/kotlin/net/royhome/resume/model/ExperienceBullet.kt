@@ -26,4 +26,6 @@ class ExperienceBullet(
     val experience: Experience,
 
     val name: String = "",
+    @Column(name = "position")
+    val position: Int? = null,
 )

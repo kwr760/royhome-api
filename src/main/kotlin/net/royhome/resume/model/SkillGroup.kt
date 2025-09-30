@@ -12,8 +12,8 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import jakarta.persistence.OrderColumn
 import jakarta.persistence.Table
-import org.hibernate.annotations.OrderBy
 import java.util.UUID
 
 @Entity
@@ -34,7 +34,9 @@ class SkillGroup(
     val experience: Experience,
 
     val name: String = "",
+    @Column(name = "position")
+    val position: Int? = null,
     @OneToMany(mappedBy = "skillGroup", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val skills: Set<Skill>,
+    @OrderColumn(name = "position")
+    val skills: List<Skill>,
 )

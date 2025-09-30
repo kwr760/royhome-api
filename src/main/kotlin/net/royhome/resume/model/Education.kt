@@ -28,4 +28,6 @@ class Education(
     val school: String = "",
     val degree: String = "",
     val graduation: String = "",
+    @Column(name = "position")
+    val position: Int? = null,
 )

@@ -26,4 +26,6 @@ class Skill(
     val skillGroup: SkillGroup,
 
     val name: String = "",
+    @Column(name = "position")
+    val position: Int? = null,
 )

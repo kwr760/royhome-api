@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:15:///royhome?TC_TMPFS=/testtmpfs:rw
+    username: test
+    password: test
+  flyway:
+    enabled: true
+    schemas: public,resume,session
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: validate
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+logging:
+  level:
+    org.hibernate.SQL: warn

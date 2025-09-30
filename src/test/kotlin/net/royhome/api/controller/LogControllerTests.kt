@@ -1,11 +1,6 @@
 package net.royhome.api.controller
 
 import io.mockk.mockk
-<<<<<<< HEAD
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-=======
->>>>>>> e20e2af291ad48063b720c9479d58335594ca389
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach

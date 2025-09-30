@@ -31,4 +31,6 @@ class Project(
     val description: String = "",
     val startDate: String? = null,
     val endDate: String? = null,
+    @Column(name = "position")
+    val position: Int? = null,
 )

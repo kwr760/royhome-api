@@ -12,8 +12,8 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import jakarta.persistence.OrderColumn
 import jakarta.persistence.Table
-import org.hibernate.annotations.OrderBy
 import java.util.UUID
 
 @Entity
@@ -34,13 +34,14 @@ class Experience(
     val company: String? = null,
     val startDate: String? = null,
     val endDate: String? = null,
+    @Column(name = "position")
+    val position: Int? = null,
     @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val description: Set<ExperienceDescription>,
+    @OrderColumn(name = "position")
+    val description: List<ExperienceDescription>,
     @OneToMany(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
-    val bullets: Set<ExperienceBullet>,
+    @OrderColumn(name = "position")
+    val bullets: List<ExperienceBullet>,
     @OneToOne(mappedBy = "experience", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @OrderBy(clause = "position")
     val tech: SkillGroup,
 )
