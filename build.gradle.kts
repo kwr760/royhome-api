@@ -47,7 +47,6 @@ dependencies {
 
   implementation("org.springframework.plugin:spring-plugin-core")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  // Flyway 11 modularizes database support; include explicit Postgres module
   implementation("org.flywaydb:flyway-core:11.13.2")
   implementation("org.flywaydb:flyway-database-postgresql:11.13.2")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
