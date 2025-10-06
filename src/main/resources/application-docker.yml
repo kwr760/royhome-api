@@ -3,7 +3,10 @@ server:
     accesslog:
       enabled: off
   ssl:
-    enabled: false
+    key-store-password: ${ROYHOME_SSL_PASSWORD}
+    key-store: /var/cert/royhome/cert.jks
+    key-store-type: PKCS12
+    enabled: true
   port: 5000
 
 spring:

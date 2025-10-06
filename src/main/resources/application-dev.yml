@@ -3,7 +3,7 @@ server:
     accesslog:
       enabled: off
   ssl:
-    key-store: C:\Users\kroy7\royhome\cert\cert.jks
+    enabled: false
   port: 5000
 
 spring:
