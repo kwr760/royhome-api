@@ -8,7 +8,7 @@ java.targetCompatibility = JavaVersion.VERSION_17
 
 plugins {
   id("org.springframework.boot") version "3.5.6"
-  id("org.flywaydb.flyway") version "11.13.0"
+  id("org.flywaydb.flyway") version "11.13.2"
   id("io.spring.dependency-management") version "1.1.7"
   id("io.gitlab.arturbosch.detekt") version "1.23.8"
   id("jacoco")
@@ -47,15 +47,14 @@ dependencies {
 
   implementation("org.springframework.plugin:spring-plugin-core")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  // Flyway 11 modularizes database support; include explicit Postgres module
-  implementation("org.flywaydb:flyway-core:11.13.0")
-  implementation("org.flywaydb:flyway-database-postgresql:11.13.0")
+  implementation("org.flywaydb:flyway-core:11.13.2")
+  implementation("org.flywaydb:flyway-database-postgresql:11.13.2")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
   // Replace Springfox with springdoc (OpenAPI 3) starter
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
   implementation("com.google.code.gson:gson:2.13.2")
 
   compileOnly("org.projectlombok:lombok")
@@ -64,7 +63,7 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("io.mockk:mockk:1.13.17")
+  testImplementation("io.mockk:mockk:1.14.6")
   // Testcontainers for DB integration tests
   testImplementation("org.testcontainers:junit-jupiter:1.21.3")
   testImplementation("org.testcontainers:postgresql:1.21.3")

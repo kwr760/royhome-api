@@ -19,7 +19,7 @@ import java.util.UUID
 
 class MessagingServiceTests {
     private lateinit var underTest: MessagingService
-    private var template: SimpMessagingTemplate = mockk()
+    private val template: SimpMessagingTemplate = mockk()
 
     @BeforeEach
     fun setUpBeforeEach() {
